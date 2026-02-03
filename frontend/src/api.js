@@ -1,4 +1,5 @@
 const API_BASE_URL = 'http://localhost:8000/api';
+const AUTH_BASE_URL = 'http://localhost:8000/api/auth';
 
 export const api = {
   // Get all rooms
@@ -44,4 +45,63 @@ export const api = {
     if (!response.ok) throw new Error('Failed to fetch bookings');
     return response.json();
   },
+};
+
+// Authentication API functions
+export const login = async (email, password) => {
+  const response = await fetch(`${AUTH_BASE_URL}/login/json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Login failed');
+  }
+  return response.json();
+};
+
+export const register = async (email, password, fullName) => {
+  const response = await fetch(`${AUTH_BASE_URL}/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+      password,
+      full_name: fullName,
+    }),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Registration failed');
+  }
+  return response.json();
+};
+
+export const getCurrentUser = async (token) => {
+  const response = await fetch(`${AUTH_BASE_URL}/me`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to get user info');
+  }
+  return response.json();
+};
+
+export const verifyToken = async (token) => {
+  const response = await fetch(`${AUTH_BASE_URL}/verify`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Token verification failed');
+  }
+  return response.json();
 };

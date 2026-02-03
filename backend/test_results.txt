@@ -1,0 +1,347 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.0rc1, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/hotel-booking-app/backend
+configfile: pytest.ini
+plugins: anyio-4.11.0, asyncio-1.3.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 27 items
+
+tests/test_api.py::TestAPIGeneral::test_root_endpoint PASSED             [  3%]
+tests/test_api.py::TestAPIGeneral::test_api_cors_headers PASSED          [  7%]
+tests/test_api.py::TestAPIGeneral::test_invalid_endpoint PASSED          [ 11%]
+tests/test_api.py::TestAPIGeneral::test_api_response_format PASSED       [ 14%]
+tests/test_api.py::TestAPIGeneral::test_api_error_handling FAILED        [ 18%]
+tests/test_api.py::TestAPIGeneral::test_api_method_not_allowed PASSED    [ 22%]
+tests/test_api.py::TestAPIGeneral::test_api_performance_rooms PASSED     [ 25%]
+tests/test_api.py::TestAPIGeneral::test_api_data_consistency PASSED      [ 29%]
+tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_valid FAILED [ 33%]
+tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_missing_fields PASSED [ 37%]
+tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_invalid_room_id FAILED [ 40%]
+tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_invalid_dates FAILED [ 44%]
+tests/test_bookings.py::TestBookingsEndpoints::test_get_all_bookings FAILED [ 48%]
+tests/test_bookings.py::TestBookingsEndpoints::test_get_booking_by_id_valid FAILED [ 51%]
+tests/test_bookings.py::TestBookingsEndpoints::test_get_booking_by_id_invalid PASSED [ 55%]
+tests/test_bookings.py::TestBookingsEndpoints::test_delete_booking_valid FAILED [ 59%]
+tests/test_bookings.py::TestBookingsEndpoints::test_delete_booking_invalid PASSED [ 62%]
+tests/test_bookings.py::TestBookingsEndpoints::test_booking_data_integrity FAILED [ 66%]
+tests/test_bookings.py::TestBookingsEndpoints::test_multiple_bookings_same_room FAILED [ 70%]
+tests/test_bookings.py::TestBookingsEndpoints::test_booking_price_calculation FAILED [ 74%]
+tests/test_rooms.py::TestRoomsEndpoints::test_get_all_rooms FAILED       [ 77%]
+tests/test_rooms.py::TestRoomsEndpoints::test_get_room_by_id_valid FAILED [ 81%]
+tests/test_rooms.py::TestRoomsEndpoints::test_get_room_by_id_invalid FAILED [ 85%]
+tests/test_rooms.py::TestRoomsEndpoints::test_rooms_data_integrity PASSED [ 88%]
+tests/test_rooms.py::TestRoomsEndpoints::test_rooms_price_range PASSED   [ 92%]
+tests/test_rooms.py::TestRoomsEndpoints::test_rooms_unique_ids PASSED    [ 96%]
+tests/test_rooms.py::TestRoomsEndpoints::test_rooms_image_urls PASSED    [100%]
+
+=================================== FAILURES ===================================
+____________________ TestAPIGeneral.test_api_error_handling ____________________
+
+self = <tests.test_api.TestAPIGeneral object at 0x7fceb0a43a50>
+client = <starlette.testclient.TestClient object at 0x7fceb0144810>
+
+    def test_api_error_handling(self, client: TestClient):
+        """
+        Test Case: Verify proper error response format
+        Expected: Error responses include detail field
+        """
+        response = client.get("/api/rooms/99999")
+    
+>       assert response.status_code == 404
+E       assert 400 == 404
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/test_api.py:60: AssertionError
+_______________ TestBookingsEndpoints.test_create_booking_valid ________________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a4e0d0>
+client = <starlette.testclient.TestClient object at 0x7fceb0147f10>
+sample_booking_data = {'check_in_date': '2026-03-01', 'check_out_date': '2026-03-05', 'guest_name': 'John Doe', 'guests': 2, ...}
+
+    def test_create_booking_valid(self, client: TestClient, sample_booking_data):
+        """
+        Test Case: POST /api/bookings - Create a new booking with valid data
+        Expected: 200 OK with booking confirmation
+        """
+        response = client.post("/api/bookings", json=sample_booking_data)
+    
+>       assert response.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/test_bookings.py:18: AssertionError
+__________ TestBookingsEndpoints.test_create_booking_invalid_room_id ___________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a4e850>
+client = <starlette.testclient.TestClient object at 0x7fceb0146ad0>
+
+    def test_create_booking_invalid_room_id(self, client: TestClient):
+        """
+        Test Case: POST /api/bookings - Create booking with non-existent room ID
+        Expected: 404 Not Found
+        """
+        invalid_booking = {
+            "roomId": 9999,
+            "guestName": "Test User",
+            "checkIn": "2026-03-01",
+            "checkOut": "2026-03-05",
+            "guests": 2,
+            "totalPrice": 999.99
+        }
+        response = client.post("/api/bookings", json=invalid_booking)
+    
+>       assert response.status_code == 404
+E       assert 422 == 404
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/test_bookings.py:54: AssertionError
+___________ TestBookingsEndpoints.test_create_booking_invalid_dates ____________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a4ed50>
+client = <starlette.testclient.TestClient object at 0x7fceb0a4eb10>
+
+    def test_create_booking_invalid_dates(self, client: TestClient):
+        """
+        Test Case: POST /api/bookings - Create booking with check-out before check-in
+        Expected: 400 Bad Request
+        """
+        invalid_dates_booking = {
+            "roomId": 1,
+            "guestName": "Test User",
+            "checkIn": "2026-03-10",
+            "checkOut": "2026-03-05",  # Before check-in
+            "guests": 2,
+            "totalPrice": 999.99
+        }
+        response = client.post("/api/bookings", json=invalid_dates_booking)
+    
+>       assert response.status_code == 400
+E       assert 422 == 400
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/test_bookings.py:71: AssertionError
+_________________ TestBookingsEndpoints.test_get_all_bookings __________________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a4f410>
+client = <starlette.testclient.TestClient object at 0x7fceb0a4c750>
+sample_booking_data = {'check_in_date': '2026-03-01', 'check_out_date': '2026-03-05', 'guest_name': 'John Doe', 'guests': 2, ...}
+
+    def test_get_all_bookings(self, client: TestClient, sample_booking_data):
+        """
+        Test Case: GET /api/bookings - Retrieve all bookings
+        Expected: 200 OK with list of bookings
+        """
+        # First create a booking
+        client.post("/api/bookings", json=sample_booking_data)
+    
+        # Then retrieve all bookings
+        response = client.get("/api/bookings")
+    
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+>       assert len(data) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests/test_bookings.py:87: AssertionError
+______________ TestBookingsEndpoints.test_get_booking_by_id_valid ______________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a4fa90>
+client = <starlette.testclient.TestClient object at 0x7fceb0146ed0>
+sample_booking_data = {'check_in_date': '2026-03-01', 'check_out_date': '2026-03-05', 'guest_name': 'John Doe', 'guests': 2, ...}
+
+    def test_get_booking_by_id_valid(self, client: TestClient, sample_booking_data):
+        """
+        Test Case: GET /api/bookings/{booking_id} - Retrieve specific booking by valid ID
+        Expected: 200 OK with booking details
+        """
+        # Create a booking first
+        create_response = client.post("/api/bookings", json=sample_booking_data)
+>       booking_id = create_response.json()["id"]
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'id'
+
+tests/test_bookings.py:96: KeyError
+_______________ TestBookingsEndpoints.test_delete_booking_valid ________________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a5c7d0>
+client = <starlette.testclient.TestClient object at 0x7fceb0a32c10>
+sample_booking_data = {'check_in_date': '2026-03-01', 'check_out_date': '2026-03-05', 'guest_name': 'John Doe', 'guests': 2, ...}
+
+    def test_delete_booking_valid(self, client: TestClient, sample_booking_data):
+        """
+        Test Case: DELETE /api/bookings/{booking_id} - Cancel existing booking
+        Expected: 200 OK with success message
+        """
+        # Create a booking first
+        create_response = client.post("/api/bookings", json=sample_booking_data)
+>       booking_id = create_response.json()["id"]
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'id'
+
+tests/test_bookings.py:123: KeyError
+______________ TestBookingsEndpoints.test_booking_data_integrity _______________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a5d4d0>
+client = <starlette.testclient.TestClient object at 0x7fceb0a66b50>
+sample_booking_data = {'check_in_date': '2026-03-01', 'check_out_date': '2026-03-05', 'guest_name': 'John Doe', 'guests': 2, ...}
+
+    def test_booking_data_integrity(self, client: TestClient, sample_booking_data):
+        """
+        Test Case: Verify booking data integrity after creation
+        Expected: All fields match the submitted data
+        """
+        response = client.post("/api/bookings", json=sample_booking_data)
+        booking = response.json()
+    
+        # Verify all fields are present and correct
+>       assert booking["roomId"] == sample_booking_data["roomId"]
+               ^^^^^^^^^^^^^^^^^
+E       KeyError: 'roomId'
+
+tests/test_bookings.py:155: KeyError
+____________ TestBookingsEndpoints.test_multiple_bookings_same_room ____________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a5dc10>
+client = <starlette.testclient.TestClient object at 0x7fceb0a64110>
+
+    def test_multiple_bookings_same_room(self, client: TestClient):
+        """
+        Test Case: Create multiple bookings for the same room
+        Expected: All bookings should be created successfully
+        """
+        booking1 = {
+            "roomId": 1,
+            "guestName": "Guest One",
+            "checkIn": "2026-03-01",
+            "checkOut": "2026-03-05",
+            "guests": 2,
+            "totalPrice": 1199.96
+        }
+    
+        booking2 = {
+            "roomId": 1,
+            "guestName": "Guest Two",
+            "checkIn": "2026-04-01",
+            "checkOut": "2026-04-05",
+            "guests": 1,
+            "totalPrice": 1199.96
+        }
+    
+        response1 = client.post("/api/bookings", json=booking1)
+        response2 = client.post("/api/bookings", json=booking2)
+    
+>       assert response1.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/test_bookings.py:188: AssertionError
+_____________ TestBookingsEndpoints.test_booking_price_calculation _____________
+
+self = <tests.test_bookings.TestBookingsEndpoints object at 0x7fceb0a5e350>
+client = <starlette.testclient.TestClient object at 0x7fceb0ab9790>
+
+    def test_booking_price_calculation(self, client: TestClient):
+        """
+        Test Case: Verify booking total price calculation
+        Expected: Total price should match room price × number of nights
+        """
+        # Get room price
+        room_response = client.get("/api/rooms/1")
+>       room_price = room_response.json()["price"]
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'price'
+
+tests/test_bookings.py:199: KeyError
+____________________ TestRoomsEndpoints.test_get_all_rooms _____________________
+
+self = <tests.test_rooms.TestRoomsEndpoints object at 0x7fceb0a5fa50>
+client = <starlette.testclient.TestClient object at 0x7fceb014a250>
+
+    def test_get_all_rooms(self, client: TestClient):
+        """
+        Test Case: GET /api/rooms - Retrieve all available rooms
+        Expected: 200 OK with list of rooms
+        """
+        response = client.get("/api/rooms")
+    
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+>       assert len(data) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests/test_rooms.py:21: AssertionError
+_________________ TestRoomsEndpoints.test_get_room_by_id_valid _________________
+
+self = <tests.test_rooms.TestRoomsEndpoints object at 0x7fceb0a4e350>
+client = <starlette.testclient.TestClient object at 0x7fceb0a4f510>
+
+    def test_get_room_by_id_valid(self, client: TestClient):
+        """
+        Test Case: GET /api/rooms/{room_id} - Retrieve specific room by valid ID
+        Expected: 200 OK with room details
+        """
+        room_id = 1
+        response = client.get(f"/api/rooms/{room_id}")
+    
+>       assert response.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/test_rooms.py:41: AssertionError
+________________ TestRoomsEndpoints.test_get_room_by_id_invalid ________________
+
+self = <tests.test_rooms.TestRoomsEndpoints object at 0x7fceb0a5d650>
+client = <starlette.testclient.TestClient object at 0x7fceb0abbcd0>
+
+    def test_get_room_by_id_invalid(self, client: TestClient):
+        """
+        Test Case: GET /api/rooms/{room_id} - Retrieve room with non-existent ID
+        Expected: 404 Not Found
+        """
+        room_id = 9999
+        response = client.get(f"/api/rooms/{room_id}")
+    
+>       assert response.status_code == 404
+E       assert 400 == 404
+E        +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests/test_rooms.py:55: AssertionError
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:271
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:271
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:271
+  /usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:271: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:606
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:606
+  /usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:606: PydanticDeprecatedSince20: `__get_validators__` is deprecated and will be removed, use `__get_pydantic_core_schema__` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warn(
+
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:252
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:252
+../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:252
+  /usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:252: PydanticDeprecatedSince20: `json_encoders` is deprecated. See https://docs.pydantic.dev/2.5/concepts/serialization/#custom-serializers for alternatives. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_api.py::TestAPIGeneral::test_api_error_handling - assert 40...
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_valid
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_invalid_room_id
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_create_booking_invalid_dates
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_get_all_bookings
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_get_booking_by_id_valid
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_delete_booking_valid
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_booking_data_integrity
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_multiple_bookings_same_room
+FAILED tests/test_bookings.py::TestBookingsEndpoints::test_booking_price_calculation
+FAILED tests/test_rooms.py::TestRoomsEndpoints::test_get_all_rooms - assert 0...
+FAILED tests/test_rooms.py::TestRoomsEndpoints::test_get_room_by_id_valid - a...
+FAILED tests/test_rooms.py::TestRoomsEndpoints::test_get_room_by_id_invalid
+================== 13 failed, 14 passed, 8 warnings in 0.23s ===================

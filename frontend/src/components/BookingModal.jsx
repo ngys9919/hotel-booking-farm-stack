@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { api } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const BookingModal = ({ room, onClose, onSuccess }) => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     guest_name: '',
     check_in_date: '',
@@ -46,6 +48,7 @@ const BookingModal = ({ room, onClose, onSuccess }) => {
         check_in_date: new Date(formData.check_in_date).toISOString(),
         check_out_date: new Date(formData.check_out_date).toISOString(),
         guests: formData.guests,
+        user_email: user?.email || null,
       };
 
       const result = await api.createBooking(bookingData);

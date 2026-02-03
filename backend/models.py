@@ -51,6 +51,7 @@ class BookingCreate(BaseModel):
     check_in_date: str
     check_out_date: str
     guests: int = 1
+    user_email: Optional[str] = None  # Optional for backward compatibility
 
 
 class Booking(BaseModel):
@@ -64,6 +65,7 @@ class Booking(BaseModel):
     total_price: float
     booking_date: datetime = Field(default_factory=datetime.utcnow)
     status: str = "confirmed"
+    user_email: Optional[str] = None  # Email of the user who made the booking
 
     class Config:
         populate_by_name = True
@@ -82,3 +84,43 @@ class BookingResponse(BaseModel):
     total_price: float
     booking_date: str
     status: str
+    user_email: Optional[str] = None
+
+
+# User Authentication Models
+
+class UserCreate(BaseModel):
+    """Model for user registration"""
+    email: str
+    password: str
+    full_name: str
+
+
+class UserLogin(BaseModel):
+    """Model for user login"""
+    email: str
+    password: str
+
+
+class User(BaseModel):
+    """User model for database"""
+    id: Optional[str] = Field(default=None, alias="_id")
+    email: str
+    hashed_password: str
+    full_name: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        populate_by_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
+
+class UserResponse(BaseModel):
+    """User response model (without password)"""
+    id: str
+    email: str
+    full_name: str
+    is_active: bool
+    created_at: str

@@ -17,6 +17,8 @@ from models import (
     Booking,
     BookingResponse,
 )
+from auth_routes import router as auth_router
+from user_bookings import router as user_bookings_router
 
 
 @asynccontextmanager
@@ -44,6 +46,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include authentication routes
+app.include_router(auth_router)
+app.include_router(user_bookings_router)
 
 
 async def initialize_sample_rooms():
@@ -113,6 +119,9 @@ async def root():
             "rooms": "/api/rooms",
             "bookings": "/api/bookings",
             "create_booking": "/api/bookings (POST)",
+            "register": "/api/auth/register (POST)",
+            "login": "/api/auth/login (POST)",
+            "me": "/api/auth/me (GET - requires auth)",
         },
     }
 
@@ -194,6 +203,7 @@ async def create_booking(booking: BookingCreate):
         "total_price": total_price,
         "booking_date": datetime.utcnow(),
         "status": "confirmed",
+        "user_email": booking.user_email,
     }
 
     result = await bookings_collection.insert_one(booking_doc)
@@ -210,6 +220,7 @@ async def create_booking(booking: BookingCreate):
         total_price=booking_doc["total_price"],
         booking_date=booking_doc["booking_date"].isoformat(),
         status=booking_doc["status"],
+        user_email=booking_doc.get("user_email"),
     )
 
 
@@ -230,6 +241,7 @@ async def get_all_bookings():
                 total_price=booking["total_price"],
                 booking_date=booking["booking_date"].isoformat(),
                 status=booking["status"],
+                user_email=booking.get("user_email"),
             )
         )
     return bookings
@@ -254,6 +266,7 @@ async def get_bookings_by_guest(guest_name: str):
                 total_price=booking["total_price"],
                 booking_date=booking["booking_date"].isoformat(),
                 status=booking["status"],
+                user_email=booking.get("user_email"),
             )
         )
     return bookings

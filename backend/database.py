@@ -32,6 +32,7 @@ database = client[settings.database_name]
 # Collections
 rooms_collection = database.get_collection("rooms")
 bookings_collection = database.get_collection("bookings")
+users_collection = database.get_collection("users")
 
 
 async def connect_to_mongo():
@@ -44,3 +45,8 @@ async def close_mongo_connection():
     """Close MongoDB connection"""
     client.close()
     print("🔌 Database connection closed")
+
+
+def get_database():
+    """Get database instance for dependency injection"""
+    return database
