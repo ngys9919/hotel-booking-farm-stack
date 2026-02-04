@@ -105,3 +105,127 @@ export const verifyToken = async (token) => {
   }
   return response.json();
 };
+
+
+// Admin API functions
+const ADMIN_BASE_URL = 'http://localhost:8000/api/admin';
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  };
+};
+
+// Admin - Statistics
+api.getAdminStats = async () => {
+  const response = await fetch(`${ADMIN_BASE_URL}/stats`, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch statistics');
+  }
+  return response.json();
+};
+
+// Admin - User Management
+api.getAllUsers = async (skip = 0, limit = 100) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/users?skip=${skip}&limit=${limit}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch users');
+  }
+  return response.json();
+};
+
+api.getUserById = async (userId) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/users/${userId}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch user');
+  }
+  return response.json();
+};
+
+api.updateUser = async (userId, updateData) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/users/${userId}`, {
+    method: 'PATCH',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(updateData),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to update user');
+  }
+  return response.json();
+};
+
+api.deleteUser = async (userId) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/users/${userId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to delete user');
+  }
+  return response.json();
+};
+
+// Admin - Booking Management
+api.getAdminBookings = async (skip = 0, limit = 100, status = null) => {
+  let url = `${ADMIN_BASE_URL}/bookings?skip=${skip}&limit=${limit}`;
+  if (status) {
+    url += `&status=${status}`;
+  }
+  const response = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch bookings');
+  }
+  return response.json();
+};
+
+api.getBookingById = async (bookingId) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/bookings/${bookingId}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to fetch booking');
+  }
+  return response.json();
+};
+
+api.updateBooking = async (bookingId, updateData) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/bookings/${bookingId}`, {
+    method: 'PATCH',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(updateData),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to update booking');
+  }
+  return response.json();
+};
+
+api.deleteBooking = async (bookingId) => {
+  const response = await fetch(`${ADMIN_BASE_URL}/bookings/${bookingId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to delete booking');
+  }
+  return response.json();
+};

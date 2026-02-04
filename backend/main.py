@@ -19,6 +19,7 @@ from models import (
 )
 from auth_routes import router as auth_router
 from user_bookings import router as user_bookings_router
+from admin_routes import router as admin_router
 
 
 @asynccontextmanager
@@ -50,6 +51,7 @@ app.add_middleware(
 # Include authentication routes
 app.include_router(auth_router)
 app.include_router(user_bookings_router)
+app.include_router(admin_router)
 
 
 async def initialize_sample_rooms():

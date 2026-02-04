@@ -39,6 +39,17 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
               </button>
             </li>
             
+            {isAuthenticated && user?.role === 'admin' && (
+              <li>
+                <button
+                  className={`nav-link admin-link ${currentPage === 'admin' ? 'active' : ''}`}
+                  onClick={() => setCurrentPage('admin')}
+                >
+                  👑 Admin Panel
+                </button>
+              </li>
+            )}
+            
             {isAuthenticated ? (
               <>
                 <li className="user-info">

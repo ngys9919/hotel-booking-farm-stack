@@ -155,6 +155,7 @@ def user_to_response(user: User) -> UserResponse:
         id=str(user.id) if user.id else "",
         email=user.email,
         full_name=user.full_name,
+        role=user.role,
         is_active=user.is_active,
         created_at=user.created_at.isoformat() if isinstance(user.created_at, datetime) else user.created_at
     )

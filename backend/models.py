@@ -108,6 +108,7 @@ class User(BaseModel):
     email: str
     hashed_password: str
     full_name: str
+    role: str = "user"  # user, admin
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -122,5 +123,6 @@ class UserResponse(BaseModel):
     id: str
     email: str
     full_name: str
+    role: str
     is_active: bool
     created_at: str

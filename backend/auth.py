@@ -125,3 +125,50 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     
     return token_data.email
+
+
+async def get_current_admin_user(current_user_email: str = Depends(get_current_user)) -> str:
+    """
+    Dependency to get the current admin user.
+    Raises HTTPException if user is not an admin.
+    
+    Args:
+        current_user_email: Email of the current authenticated user
+        
+    Returns:
+        Email of the admin user
+        
+    Raises:
+        HTTPException: If user is not an admin
+    """
+    from database import users_collection
+    
+    # Get user from database to check role
+    user_data = await users_collection.find_one({"email": current_user_email})
+    
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    if user_data.get("role") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized. Admin access required."
+        )
+    
+    return current_user_email
+
+
+def is_admin(role: str) -> bool:
+    """
+    Check if a role is admin.
+    
+    Args:
+        role: User role string
+        
+    Returns:
+        True if role is admin, False otherwise
+    """
+    return role == "admin"
