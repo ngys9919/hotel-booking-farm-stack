@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Haven Hotel - Booking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #1e3a8a;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #f0f4ff;
+        }
+
+        .nav-btn.primary {
+            background: #ef4444;
+            color: white;
+        }
+
+        .nav-btn.primary:hover {
+            background: #dc2626;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        /* Rooms Grid */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .room-content {
+            padding: 1.5rem;
+        }
+
+        .room-name {
+            font-size: 1.5rem;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-price {
+            font-size: 1.8rem;
+            color: #ef4444;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .room-description {
+            color: #64748b;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .room-amenities {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .amenity {
+            background: #f0f4ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #1e3a8a;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .book-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #1e3a8a;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1e40af;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1rem;
+            color: #64748b;
+        }
+
+        .form-link {
+            color: #1e3a8a;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Bookings Page */
+        .bookings-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .bookings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .bookings-title {
+            font-size: 2rem;
+            color: #1e3a8a;
+        }
+
+        .booking-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ef4444;
+        }
+
+        .booking-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.active {
+            display: block;
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">🏨 Luxury Haven</div>
+        <div class="nav-links">
+            <button class="nav-btn" onclick="showPage('home')">Home</button>
+            <button class="nav-btn" onclick="showPage('bookings')" id="myBookingsBtn" style="display:none;">My Bookings</button>
+            <div id="authButtons">
+                <button class="nav-btn" onclick="showModal('login')">Login</button>
+                <button class="nav-btn primary" onclick="showModal('register')">Sign Up</button>
+            </div>
+            <div id="userSection" class="hidden">
+                <div class="user-info">
+                    <span>👤</span>
+                    <span id="userName"></span>
+                </div>
+                <button class="nav-btn primary" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Home Page -->
+        <div id="homePage">
+            <!-- Hero Section -->
+            <div class="hero">
+                <h1>Welcome to Luxury Haven Hotel</h1>
+                <p>Experience luxury and comfort in our premium rooms</p>
+            </div>
+
+            <!-- Rooms Grid -->
+            <div class="rooms-grid" id="roomsGrid"></div>
+        </div>
+
+        <!-- Bookings Page -->
+        <div id="bookingsPage" class="hidden">
+            <div class="bookings-container">
+                <div class="bookings-header">
+                    <h2 class="bookings-title">My Bookings</h2>
+                </div>
+                <div id="bookingsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Login</h2>
+                <button class="close-btn" onclick="closeModal('login')">&times;</button>
+            </div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+                <div class="form-footer">
+                    Don't have an account? <span class="form-link" onclick="switchModal('login', 'register')">Sign up</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign Up</h2>
+                <button class="close-btn" onclick="closeModal('register')">&times;</button>
+            </div>
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="registerPassword" required minlength="6">
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+                <div class="form-footer">
+                    Already have an account? <span class="form-link" onclick="switchModal('register', 'login')">Login</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Book Room</h2>
+                <button class="close-btn" onclick="closeModal('booking')">&times;</button>
+            </div>
+            <form onsubmit="createBooking(event)">
+                <div id="selectedRoomInfo" style="margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 8px;"></div>
+                <div class="form-group">
+                    <label class="form-label">Guest Name</label>
+                    <input type="text" class="form-input" id="bookingGuestName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Check-in Date</label>
+                    <input type="date" class="form-input" id="bookingCheckIn" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Check-out Date</label>
+                    <input type="date" class="form-input" id="bookingCheckOut" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Number of Guests</label>
+                    <input type="number" class="form-input" id="bookingGuests" min="1" max="4" value="1" required>
+                </div>
+                <div id="bookingSummary" style="margin-bottom: 1.5rem; padding: 1rem; background: #f0f4ff; border-radius: 8px; display: none;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Nights:</span>
+                        <span id="totalNights">0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; color: #1e3a8a;">
+                        <span>Total Price:</span>
+                        <span id="totalPrice">$0.00</span>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        // Sample room data
+        const rooms = [
+            {
+                id: 1,
+                name: "Deluxe Ocean View Suite",
+                price: 299.99,
+                image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+                description: "Spacious suite with breathtaking ocean views and premium amenities.",
+                amenities: ["Ocean View", "King Bed", "Balcony", "Mini Bar"]
+            },
+            {
+                id: 2,
+                name: "Executive Business Room",
+                price: 189.99,
+                image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
+                description: "Perfect for business travelers with work desk and high-speed internet.",
+                amenities: ["Work Desk", "WiFi", "Coffee Maker", "Queen Bed"]
+            },
+            {
+                id: 3,
+                name: "Family Garden Suite",
+                price: 349.99,
+                image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+                description: "Spacious suite ideal for families with garden access.",
+                amenities: ["Garden View", "2 Bedrooms", "Living Room", "Kitchenette"]
+            },
+            {
+                id: 4,
+                name: "Cozy Standard Room",
+                price: 129.99,
+                image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
+                description: "Comfortable and affordable room with all essential amenities.",
+                amenities: ["Double Bed", "WiFi", "TV", "Bathroom"]
+            },
+            {
+                id: 5,
+                name: "Presidential Penthouse",
+                price: 799.99,
+                image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800",
+                description: "Ultimate luxury with panoramic city views and exclusive services.",
+                amenities: ["Panoramic View", "Jacuzzi", "Butler Service", "Private Terrace"]
+            },
+            {
+                id: 6,
+                name: "Mountain View Cabin",
+                price: 249.99,
+                image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
+                description: "Rustic charm with modern comforts and stunning mountain views.",
+                amenities: ["Mountain View", "Fireplace", "King Bed", "Balcony"]
+            }
+        ];
+
+        let currentUser = null;
+        let selectedRoom = null;
+
+        // Initialize
+        function init() {
+            loadUser();
+            renderRooms();
+            updateUI();
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingCheckIn').min = today;
+            document.getElementById('bookingCheckOut').min = today;
+            
+            // Add date change listeners
+            document.getElementById('bookingCheckIn').addEventListener('change', calculateTotal);
+            document.getElementById('bookingCheckOut').addEventListener('change', calculateTotal);
+        }
+
+        // Load user from localStorage
+        function loadUser() {
+            const userStr = localStorage.getItem('currentUser');
+            if (userStr) {
+                currentUser = JSON.parse(userStr);
+            }
+        }
+
+        // Update UI based on auth state
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userSection').classList.remove('hidden');
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('myBookingsBtn').style.display = 'block';
+            } else {
+                document.getElementById('authButtons').classList.remove('hidden');
+                document.getElementById('userSection').classList.add('hidden');
+                document.getElementById('myBookingsBtn').style.display = 'none';
+            }
+        }
+
+        // Render rooms
+        function renderRooms() {
+            const grid = document.getElementById('roomsGrid');
+            grid.innerHTML = rooms.map(room => `
+                <div class="room-card">
+                    <img src="${room.image}" alt="${room.name}" class="room-image">
+                    <div class="room-content">
+                        <h3 class="room-name">${room.name}</h3>
+                        <div class="room-price">$${room.price.toFixed(2)}<span style="font-size: 0.6em; font-weight: 400;">/night</span></div>
+                        <p class="room-description">${room.description}</p>
+                        <div class="room-amenities">
+                            ${room.amenities.map(a => `<span class="amenity">${a}</span>`).join('')}
+                        </div>
+                        <button class="book-btn" onclick="openBooking(${room.id})">Book Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show/hide modals
+        function showModal(type) {
+            document.getElementById(type + 'Modal').classList.add('active');
+        }
+
+        function closeModal(type) {
+            document.getElementById(type + 'Modal').classList.remove('active');
+        }
+
+        function switchModal(from, to) {
+            closeModal(from);
+            showModal(to);
+        }
+
+        // Register
+        function register(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            // Get existing users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Check if email exists
+            if (users.find(u => u.email === email)) {
+                showNotification('Email already registered', 'error');
+                return;
+            }
+
+            // Add new user
+            const newUser = { id: Date.now(), name, email, password, role: 'user' };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Auto login
+            currentUser = { id: newUser.id, name, email, role: newUser.role };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            closeModal('register');
+            updateUI();
+            showNotification('Registration successful!', 'success');
+        }
+
+        // Login
+        function login(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                currentUser = { id: user.id, name: user.name, email: user.email, role: user.role };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                closeModal('login');
+                updateUI();
+                showNotification('Login successful!', 'success');
+            } else {
+                showNotification('Invalid email or password', 'error');
+            }
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUI();
+            showPage('home');
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // Open booking modal
+        function openBooking(roomId) {
+            if (!currentUser) {
+                showNotification('Please login to book a room', 'error');
+                showModal('login');
+                return;
+            }
+
+            selectedRoom = rooms.find(r => r.id === roomId);
+            document.getElementById('selectedRoomInfo').innerHTML = `
+                <h4 style="color: #1e3a8a; margin-bottom: 0.5rem;">${selectedRoom.name}</h4>
+                <div style="font-size: 1.2rem; color: #ef4444; font-weight: 700;">$${selectedRoom.price.toFixed(2)}/night</div>
+            `;
+            document.getElementById('bookingGuestName').value = currentUser.name;
+            showModal('booking');
+        }
+
+        // Calculate total
+        function calculateTotal() {
+            const checkIn = new Date(document.getElementById('bookingCheckIn').value);
+            const checkOut = new Date(document.getElementById('bookingCheckOut').value);
+
+            if (checkIn && checkOut && checkOut > checkIn) {
+                const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                const total = nights * selectedRoom.price;
+
+                document.getElementById('totalNights').textContent = nights;
+                document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+                document.getElementById('bookingSummary').style.display = 'block';
+            } else {
+                document.getElementById('bookingSummary').style.display = 'none';
+            }
+        }
+
+        // Create booking
+        function createBooking(e) {
+            e.preventDefault();
+            
+            const guestName = document.getElementById('bookingGuestName').value;
+            const checkIn = document.getElementById('bookingCheckIn').value;
+            const checkOut = document.getElementById('bookingCheckOut').value;
+            const guests = document.getElementById('bookingGuests').value;
+
+            const checkInDate = new Date(checkIn);
+            const checkOutDate = new Date(checkOut);
+            const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            const totalPrice = nights * selectedRoom.price;
+
+            const booking = {
+                id: Date.now(),
+                userId: currentUser.id,
+                roomId: selectedRoom.id,
+                roomName: selectedRoom.name,
+                guestName,
+                checkIn,
+                checkOut,
+                guests: parseInt(guests),
+                totalPrice,
+                status: 'confirmed',
+                bookingDate: new Date().toISOString()
+            };
+
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            closeModal('booking');
+            showNotification('Booking confirmed successfully!', 'success');
+            
+            // Reset form
+            e.target.reset();
+            document.getElementById('bookingSummary').style.display = 'none';
+        }
+
+        // Show page
+        function showPage(page) {
+            if (page === 'bookings') {
+                if (!currentUser) {
+                    showNotification('Please login to view bookings', 'error');
+                    showModal('login');
+                    return;
+                }
+                document.getElementById('homePage').classList.add('hidden');
+                document.getElementById('bookingsPage').classList.remove('hidden');
+                renderBookings();
+            } else {
+                document.getElementById('homePage').classList.remove('hidden');
+                document.getElementById('bookingsPage').classList.add('hidden');
+            }
+        }
+
+        // Render bookings
+        function renderBookings() {
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const userBookings = bookings.filter(b => b.userId === currentUser.id);
+
+            const list = document.getElementById('bookingsList');
+            
+            if (userBookings.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>No bookings yet. Book a room to get started!</p></div>';
+                return;
+            }
+
+            list.innerHTML = userBookings.map(booking => `
+                <div class="booking-card">
+                    <div class="booking-info">
+                        <div class="info-item">
+                            <span class="info-label">Room</span>
+                            <span class="info-value">${booking.roomName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Guest Name</span>
+                            <span class="info-value">${booking.guestName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Check-in</span>
+                            <span class="info-value">${new Date(booking.checkIn).toLocaleDateString()}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Check-out</span>
+                            <span class="info-value">${new Date(booking.checkOut).toLocaleDateString()}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Guests</span>
+                            <span class="info-value">${booking.guests}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Price</span>
+                            <span class="info-value">$${booking.totalPrice.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <span class="status-badge status-confirmed">${booking.status}</span>
+                </div>
+            `).join('');
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            notification.className = `notification ${type} active`;
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>

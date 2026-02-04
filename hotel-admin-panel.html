@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Haven Hotel - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Admin Panel Layout */
+        .admin-panel {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .admin-name {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            width: 100%;
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid #ef4444;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .login-title {
+            font-size: 2rem;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Dashboard */
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+        }
+
+        .stat-content h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .stat-detail {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        /* Controls */
+        .page-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #1e40af;
+        }
+
+        /* Table */
+        .admin-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .admin-table thead {
+            background: #f8fafc;
+        }
+
+        .admin-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .admin-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }
+
+        .admin-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-user {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: #f1f5f9;
+            transition: all 0.2s;
+        }
+
+        .btn-small:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .btn-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1e40af;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.active {
+            display: block;
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1 class="login-title">🏨 Admin Panel</h1>
+            <p class="login-subtitle">Luxury Haven Hotel</p>
+            <form onsubmit="adminLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="adminPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Login as Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🏨 Admin Panel</h2>
+                <p class="admin-name" id="adminName"></p>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="showView('dashboard')">
+                    <span>📊</span> Dashboard
+                </button>
+                <button class="nav-item" onclick="showView('users')">
+                    <span>👥</span> Users
+                </button>
+                <button class="nav-item" onclick="showView('bookings')">
+                    <span>📅</span> Bookings
+                </button>
+                <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 20px 0;"></div>
+                <button class="nav-item" onclick="adminLogout()">
+                    <span>🚪</span> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back, Admin</p>
+                </div>
+
+                <div class="stats-grid" id="statsGrid"></div>
+            </div>
+
+            <!-- Users View -->
+            <div id="usersView" class="hidden">
+                <div class="page-header">
+                    <h1 class="page-title">User Management</h1>
+                    <p class="page-subtitle">Manage all registered users</p>
+                </div>
+
+                <div class="page-controls">
+                    <input type="text" class="search-input" id="userSearch" placeholder="Search by email or name..." oninput="filterUsers()">
+                    <button class="btn" onclick="loadUsers()">🔄 Refresh</button>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Full Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Bookings View -->
+            <div id="bookingsView" class="hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Booking Management</h1>
+                    <p class="page-subtitle">Manage all hotel bookings</p>
+                </div>
+
+                <div class="page-controls">
+                    <input type="text" class="search-input" id="bookingSearch" placeholder="Search by guest or room..." oninput="filterBookings()">
+                    <select class="filter-select" id="statusFilter" onchange="filterBookings()">
+                        <option value="all">All Statuses</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <button class="btn" onclick="loadBookings()">🔄 Refresh</button>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Guest Name</th>
+                            <th>Room</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Guests</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTable"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        let currentAdmin = null;
+        let allUsers = [];
+        let allBookings = [];
+
+        // Initialize
+        function init() {
+            // Create default admin if not exists
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (!users.find(u => u.email === 'admin@hotel.com')) {
+                users.push({
+                    id: Date.now(),
+                    name: 'Admin User',
+                    email: 'admin@hotel.com',
+                    password: 'admin123',
+                    role: 'admin'
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            checkAdminAuth();
+        }
+
+        // Check admin authentication
+        function checkAdminAuth() {
+            const adminStr = localStorage.getItem('currentAdmin');
+            if (adminStr) {
+                currentAdmin = JSON.parse(adminStr);
+                showAdminPanel();
+            }
+        }
+
+        // Admin login
+        function adminLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const admin = users.find(u => u.email === email && u.password === password && u.role === 'admin');
+
+            if (admin) {
+                currentAdmin = { id: admin.id, name: admin.name, email: admin.email, role: admin.role };
+                localStorage.setItem('currentAdmin', JSON.stringify(currentAdmin));
+                showAdminPanel();
+                showNotification('Login successful!', 'success');
+            } else {
+                showNotification('Invalid credentials or not an admin', 'error');
+            }
+        }
+
+        // Admin logout
+        function adminLogout() {
+            currentAdmin = null;
+            localStorage.removeItem('currentAdmin');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // Show admin panel
+        function showAdminPanel() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('adminName').textContent = currentAdmin.name;
+            loadDashboard();
+        }
+
+        // Show view
+        function showView(view) {
+            // Hide all views
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('usersView').classList.add('hidden');
+            document.getElementById('bookingsView').classList.add('hidden');
+
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show selected view
+            if (view === 'dashboard') {
+                document.getElementById('dashboardView').classList.remove('hidden');
+                loadDashboard();
+            } else if (view === 'users') {
+                document.getElementById('usersView').classList.remove('hidden');
+                loadUsers();
+            } else if (view === 'bookings') {
+                document.getElementById('bookingsView').classList.remove('hidden');
+                loadBookings();
+            }
+        }
+
+        // Load dashboard
+        function loadDashboard() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+
+            const totalUsers = users.length;
+            const activeUsers = users.filter(u => u.role !== 'admin').length;
+            const adminUsers = users.filter(u => u.role === 'admin').length;
+
+            const totalBookings = bookings.length;
+            const confirmedBookings = bookings.filter(b => b.status === 'confirmed').length;
+            const cancelledBookings = bookings.filter(b => b.status === 'cancelled').length;
+
+            const totalRevenue = bookings
+                .filter(b => b.status === 'confirmed')
+                .reduce((sum, b) => sum + b.totalPrice, 0);
+
+            const bookingRate = totalBookings > 0 ? Math.round((confirmedBookings / totalBookings) * 100) : 0;
+
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3>Total Users</h3>
+                        <div class="stat-number">${totalUsers}</div>
+                        <div class="stat-detail">${activeUsers} users • ${adminUsers} admins</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <h3>Total Bookings</h3>
+                        <div class="stat-number">${totalBookings}</div>
+                        <div class="stat-detail">${confirmedBookings} confirmed • ${cancelledBookings} cancelled</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <h3>Total Revenue</h3>
+                        <div class="stat-number">$${totalRevenue.toLocaleString()}</div>
+                        <div class="stat-detail">From confirmed bookings</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3>Booking Rate</h3>
+                        <div class="stat-number">${bookingRate}%</div>
+                        <div class="stat-detail">Confirmation rate</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load users
+        function loadUsers() {
+            allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            filterUsers();
+        }
+
+        // Filter users
+        function filterUsers() {
+            const search = document.getElementById('userSearch').value.toLowerCase();
+            const filtered = allUsers.filter(u => 
+                u.email.toLowerCase().includes(search) || 
+                u.name.toLowerCase().includes(search)
+            );
+
+            renderUsers(filtered);
+        }
+
+        // Render users
+        function renderUsers(users) {
+            const table = document.getElementById('usersTable');
+            
+            if (users.length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="empty-state">No users found</td></tr>';
+                return;
+            }
+
+            table.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.email}</td>
+                    <td>${user.name}</td>
+                    <td><span class="badge badge-${user.role}">${user.role}</span></td>
+                    <td><span class="badge badge-active">active</span></td>
+                    <td class="action-buttons">
+                        <button class="btn-small" onclick="toggleUserRole(${user.id})" title="Toggle role">
+                            ${user.role === 'admin' ? '👤' : '👑'}
+                        </button>
+                        <button class="btn-small btn-danger" onclick="deleteUser(${user.id})" title="Delete user">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Toggle user role
+        function toggleUserRole(userId) {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.id === userId);
+            
+            if (user) {
+                const newRole = user.role === 'admin' ? 'user' : 'admin';
+                if (confirm(`Change ${user.email}'s role to ${newRole}?`)) {
+                    user.role = newRole;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    loadUsers();
+                    showNotification(`User role updated to ${newRole}`, 'success');
+                }
+            }
+        }
+
+        // Delete user
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                users = users.filter(u => u.id !== userId);
+                localStorage.setItem('users', JSON.stringify(users));
+                loadUsers();
+                showNotification('User deleted successfully', 'success');
+            }
+        }
+
+        // Load bookings
+        function loadBookings() {
+            allBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            filterBookings();
+        }
+
+        // Filter bookings
+        function filterBookings() {
+            const search = document.getElementById('bookingSearch').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+
+            let filtered = allBookings;
+
+            if (search) {
+                filtered = filtered.filter(b => 
+                    b.guestName.toLowerCase().includes(search) || 
+                    b.roomName.toLowerCase().includes(search)
+                );
+            }
+
+            if (status !== 'all') {
+                filtered = filtered.filter(b => b.status === status);
+            }
+
+            renderBookings(filtered);
+        }
+
+        // Render bookings
+        function renderBookings(bookings) {
+            const table = document.getElementById('bookingsTable');
+            
+            if (bookings.length === 0) {
+                table.innerHTML = '<tr><td colspan="8" class="empty-state">No bookings found</td></tr>';
+                return;
+            }
+
+            table.innerHTML = bookings.map(booking => `
+                <tr>
+                    <td>${booking.guestName}</td>
+                    <td>${booking.roomName}</td>
+                    <td>${new Date(booking.checkIn).toLocaleDateString()}</td>
+                    <td>${new Date(booking.checkOut).toLocaleDateString()}</td>
+                    <td>${booking.guests}</td>
+                    <td>$${booking.totalPrice.toFixed(2)}</td>
+                    <td><span class="badge badge-${booking.status}">${booking.status}</span></td>
+                    <td class="action-buttons">
+                        ${booking.status === 'confirmed' ? `
+                            <button class="btn-small btn-warning" onclick="updateBookingStatus(${booking.id}, 'cancelled')" title="Cancel">
+                                ✗
+                            </button>
+                        ` : ''}
+                        ${booking.status === 'pending' ? `
+                            <button class="btn-small btn-success" onclick="updateBookingStatus(${booking.id}, 'confirmed')" title="Confirm">
+                                ✓
+                            </button>
+                            <button class="btn-small btn-warning" onclick="updateBookingStatus(${booking.id}, 'cancelled')" title="Cancel">
+                                ✗
+                            </button>
+                        ` : ''}
+                        ${booking.status === 'cancelled' ? `
+                            <button class="btn-small btn-success" onclick="updateBookingStatus(${booking.id}, 'confirmed')" title="Reactivate">
+                                ↻
+                            </button>
+                        ` : ''}
+                        <button class="btn-small btn-danger" onclick="deleteBooking(${booking.id})" title="Delete">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update booking status
+        function updateBookingStatus(bookingId, newStatus) {
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            if (booking) {
+                booking.status = newStatus;
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                loadBookings();
+                showNotification(`Booking status updated to ${newStatus}`, 'success');
+                loadDashboard(); // Refresh stats
+            }
+        }
+
+        // Delete booking
+        function deleteBooking(bookingId) {
+            if (confirm('Are you sure you want to delete this booking?')) {
+                let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                bookings = bookings.filter(b => b.id !== bookingId);
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                loadBookings();
+                showNotification('Booking deleted successfully', 'success');
+                loadDashboard(); // Refresh stats
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            notification.className = `notification ${type} active`;
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
