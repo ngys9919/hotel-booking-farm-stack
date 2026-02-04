@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive Authentication Test Plan and Security Documentation for Hotel Booking Application">
+    <meta name="keywords" content="authentication, security testing, test plan, vulnerability assessment, OWASP">
+    <title>Authentication Test Plan - Hotel Booking Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-color: #34495e;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-card p {
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .badge-critical { background: #e74c3c; color: white; }
+        .badge-high { background: #f39c12; color: white; }
+        .badge-medium { background: #3498db; color: white; }
+        .badge-success { background: #27ae60; color: white; }
+
+        .icon {
+            font-size: 1.5em;
+        }
+
+        .features {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .features h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            padding: 15px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .feature-item h3 {
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .github-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .github-link:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .stats {
+                gap: 15px;
+            }
+
+            .stat-box {
+                min-width: 120px;
+                padding: 10px 15px;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 Authentication Test Plan</h1>
+            <p class="subtitle">Comprehensive Security Testing & Vulnerability Assessment</p>
+            <p>Hotel Booking Application - FARM Stack</p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <span class="stat-number">65</span>
+                    <span class="stat-label">Test Cases</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">Vulnerabilities</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">5,000+</span>
+                    <span class="stat-label">Lines of Docs</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">2,400+</span>
+                    <span class="stat-label">Lines of Tests</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="nav-grid">
+            <a href="test-plan.html" class="nav-card">
+                <h2><span class="icon">📋</span> Test Plan</h2>
+                <p>Comprehensive test strategy with 65 detailed test cases covering functional testing, security testing, and edge cases.</p>
+                <span class="badge badge-success">1,200+ lines</span>
+                <span class="badge badge-medium">65 Test Cases</span>
+            </a>
+
+            <a href="security-vulnerabilities.html" class="nav-card">
+                <h2><span class="icon">🔒</span> Security Vulnerabilities</h2>
+                <p>Detailed security assessment with 15 identified vulnerabilities, CVSS scores, and remediation guidance.</p>
+                <span class="badge badge-critical">1,800+ lines</span>
+                <span class="badge badge-high">15 Vulnerabilities</span>
+            </a>
+
+            <a href="test-execution-report.html" class="nav-card">
+                <h2><span class="icon">📊</span> Test Execution Report</h2>
+                <p>Detailed test results analysis with 53.8% pass rate, critical issues, and actionable recommendations.</p>
+                <span class="badge badge-medium">1,000+ lines</span>
+                <span class="badge badge-high">Priority Issues</span>
+            </a>
+        </div>
+
+        <div class="features">
+            <h2>✨ Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🎯 Comprehensive Coverage</h3>
+                    <p>65 test cases covering all authentication flows, security scenarios, and edge cases</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔐 Security Focus</h3>
+                    <p>OWASP Top 10 alignment, CVSS scoring, and real-world attack simulations</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🤖 Fully Automated</h3>
+                    <p>Pytest framework, CI/CD ready, fast execution (< 10 seconds)</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📈 Actionable Insights</h3>
+                    <p>Priority classification, remediation steps, and code examples</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔍 Full Traceability</h3>
+                    <p>Test case IDs (TC-XXX), vulnerability tracking (VULN-XXX)</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📚 Excellent Documentation</h3>
+                    <p>5,000+ lines of detailed guides, best practices, and examples</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>🚨 Critical Findings</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Priority 1: Critical</h3>
+                    <p>✗ Protected endpoints not secured<br>
+                       ✗ Login endpoint issues<br>
+                       <strong>Action: Fix immediately</strong></p>
+                </div>
+                <div class="feature-item">
+                    <h3>Priority 2: High</h3>
+                    <p>✗ Email validation too permissive<br>
+                       ✗ RBAC not working<br>
+                       ✗ No rate limiting<br>
+                       <strong>Action: Fix within 1 week</strong></p>
+                </div>
+                <div class="feature-item">
+                    <h3>Priority 3: Medium</h3>
+                    <p>✗ No token blacklist<br>
+                       ✗ Weak password policy<br>
+                       ✗ No input sanitization<br>
+                       <strong>Action: Fix within 2 weeks</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>📁 GitHub Repository</h3>
+            <p>Access the complete source code, test scripts, and documentation</p>
+            <a href="https://github.com/ngys9919/hotel-booking-farm-stack" class="github-link" target="_blank">
+                View on GitHub →
+            </a>
+            <p style="margin-top: 20px; color: #7f8c8d; font-size: 0.9em;">
+                Test Plan Version 1.0 | Created February 2026<br>
+                Hotel Booking Application - FARM Stack (FastAPI + React + MongoDB)
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Plan - Authentication Test Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
+        h3 { color: #7f8c8d; margin-top: 20px; }
+        code {
+            background: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin-left: 0;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .nav {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            color: #5dade2;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">← Home</a>
+        <a href="test-plan.html">Test Plan</a>
+        <a href="security-vulnerabilities.html">Security</a>
+        <a href="test-execution-report.html">Report</a>
+        <a href="https://github.com/ngys9919/hotel-booking-farm-stack" target="_blank">GitHub →</a>
+    </div>
+    <div class="container">
+        <h1>Comprehensive Authentication System Test Plan</h1>
+<h2>Document Information</h2>
+<p><strong>Project:</strong> Luxury Haven Hotel Booking System<br />
+<strong>Component:</strong> User Authentication System<br />
+<strong>Version:</strong> 1.0<br />
+<strong>Date:</strong> February 2026<br />
+<strong>Author:</strong> QA Team<br />
+<strong>Status:</strong> Active</p>
+<hr />
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#test-objectives">Test Objectives</a></li>
+<li><a href="#test-scope">Test Scope</a></li>
+<li><a href="#test-strategy">Test Strategy</a></li>
+<li><a href="#functional-test-cases">Functional Test Cases</a></li>
+<li><a href="#security-test-cases">Security Test Cases</a></li>
+<li><a href="#edge-cases-and-boundary-testing">Edge Cases and Boundary Testing</a></li>
+<li><a href="#performance-testing">Performance Testing</a></li>
+<li><a href="#integration-testing">Integration Testing</a></li>
+<li><a href="#security-vulnerabilities-assessment">Security Vulnerabilities Assessment</a></li>
+<li><a href="#test-environment">Test Environment</a></li>
+<li><a href="#test-data">Test Data</a></li>
+<li><a href="#test-execution-schedule">Test Execution Schedule</a></li>
+<li><a href="#defect-management">Defect Management</a></li>
+<li><a href="#test-metrics">Test Metrics</a></li>
+<li><a href="#appendix">Appendix</a></li>
+</ol>
+<hr />
+<h2>1. Introduction</h2>
+<p>This document outlines the comprehensive test plan for the user authentication system of the Luxury Haven Hotel Booking application. The authentication system is built using FastAPI, JWT tokens, bcrypt password hashing, and MongoDB for user storage.</p>
+<h3>1.1 Purpose</h3>
+<p>The purpose of this test plan is to ensure the authentication system is secure, reliable, and functions correctly under all conditions, including edge cases and potential security threats.</p>
+<h3>1.2 System Under Test</h3>
+<p><strong>Backend Components:</strong>
+- FastAPI authentication endpoints (<code>/api/auth/*</code>)
+- JWT token generation and validation
+- Password hashing with bcrypt
+- User database operations
+- Role-based access control (RBAC)</p>
+<p><strong>Frontend Components:</strong>
+- Registration form
+- Login form
+- Authentication context
+- Protected routes
+- Session management</p>
+<hr />
+<h2>2. Test Objectives</h2>
+<h3>2.1 Primary Objectives</h3>
+<ol>
+<li><strong>Verify Functional Correctness</strong>: Ensure all authentication features work as designed</li>
+<li><strong>Validate Security</strong>: Identify and address security vulnerabilities</li>
+<li><strong>Test Edge Cases</strong>: Verify system behavior under unusual conditions</li>
+<li><strong>Assess Performance</strong>: Ensure authentication operations meet performance requirements</li>
+<li><strong>Verify Integration</strong>: Confirm proper integration with booking system</li>
+</ol>
+<h3>2.2 Success Criteria</h3>
+<ul>
+<li><strong>100% of critical test cases pass</strong></li>
+<li><strong>0 high-severity security vulnerabilities</strong></li>
+<li><strong>95%+ code coverage for authentication modules</strong></li>
+<li><strong>Authentication response time &lt; 500ms</strong></li>
+<li><strong>No data leakage in error messages</strong></li>
+</ul>
+<hr />
+<h2>3. Test Scope</h2>
+<h3>3.1 In Scope</h3>
+<p><strong>Functional Testing:</strong>
+- User registration
+- User login
+- Token generation and validation
+- Password hashing and verification
+- Role-based access control
+- Session management
+- Logout functionality</p>
+<p><strong>Security Testing:</strong>
+- SQL injection attempts
+- XSS attacks
+- CSRF protection
+- Brute force protection
+- Token security
+- Password strength validation
+- Data encryption</p>
+<p><strong>Non-Functional Testing:</strong>
+- Performance testing
+- Load testing
+- Stress testing
+- Concurrent user testing</p>
+<h3>3.2 Out of Scope</h3>
+<ul>
+<li>Email verification (not implemented)</li>
+<li>Password reset (not implemented)</li>
+<li>Two-factor authentication (not implemented)</li>
+<li>OAuth/Social login (not implemented)</li>
+<li>Mobile app testing (web only)</li>
+</ul>
+<hr />
+<h2>4. Test Strategy</h2>
+<h3>4.1 Testing Levels</h3>
+<p><strong>Unit Testing:</strong>
+- Individual function testing
+- Password hashing functions
+- Token generation functions
+- Validation functions</p>
+<p><strong>Integration Testing:</strong>
+- API endpoint testing
+- Database integration testing
+- Frontend-backend integration</p>
+<p><strong>System Testing:</strong>
+- End-to-end workflows
+- Complete user journeys
+- Cross-component testing</p>
+<p><strong>Security Testing:</strong>
+- Penetration testing
+- Vulnerability scanning
+- Security audit</p>
+<h3>4.2 Testing Types</h3>
+<p><strong>Functional Testing:</strong>
+- Positive testing (valid inputs)
+- Negative testing (invalid inputs)
+- Boundary testing
+- Error handling testing</p>
+<p><strong>Security Testing:</strong>
+- Authentication bypass attempts
+- Authorization testing
+- Input validation testing
+- Session management testing
+- Cryptography testing</p>
+<p><strong>Performance Testing:</strong>
+- Response time testing
+- Concurrent user testing
+- Load testing
+- Stress testing</p>
+<hr />
+<h2>5. Functional Test Cases</h2>
+<h3>5.1 User Registration</h3>
+<h4>TC-AUTH-001: Successful User Registration</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Functional<br />
+<strong>Preconditions:</strong> None  </p>
+<p><strong>Test Steps:</strong>
+1. Send POST request to <code>/api/auth/register</code>
+2. Provide valid user data:
+   <code>json
+   {
+     "email": "test@example.com",
+     "password": "SecurePass123!",
+     "full_name": "Test User"
+   }</code>
+3. Verify response status is 201
+4. Verify response contains user data (without password)
+5. Verify user is created in database
+6. Verify password is hashed in database</p>
+<p><strong>Expected Result:</strong>
+- Status: 201 Created
+- Response contains: <code>id</code>, <code>email</code>, <code>full_name</code>, <code>role</code>
+- Password is hashed with bcrypt
+- User role defaults to "user"</p>
+<p><strong>Test Data:</strong>
+- Valid email formats
+- Strong passwords (8+ chars, mixed case, numbers, symbols)
+- Various name formats</p>
+<hr />
+<h4>TC-AUTH-002: Registration with Duplicate Email</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Functional - Negative<br />
+<strong>Preconditions:</strong> User with email exists  </p>
+<p><strong>Test Steps:</strong>
+1. Create user with email "existing@example.com"
+2. Attempt to register another user with same email
+3. Verify response status is 400
+4. Verify error message is clear</p>
+<p><strong>Expected Result:</strong>
+- Status: 400 Bad Request
+- Error message: "Email already registered"
+- No duplicate user created</p>
+<hr />
+<h4>TC-AUTH-003: Registration with Invalid Email Format</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Functional - Negative  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with invalid emails:
+   - "notanemail"
+   - "missing@domain"
+   - "@nodomain.com"
+   - "spaces in@email.com"
+2. Verify each returns 422 Unprocessable Entity</p>
+<p><strong>Expected Result:</strong>
+- Status: 422 for each invalid email
+- Clear validation error message</p>
+<hr />
+<h4>TC-AUTH-004: Registration with Weak Password</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with weak passwords:
+   - "123" (too short)
+   - "password" (common password)
+   - "12345678" (only numbers)
+2. Verify password validation</p>
+<p><strong>Expected Result:</strong>
+- Passwords should be rejected or warning shown
+- Minimum 8 characters enforced</p>
+<hr />
+<h4>TC-AUTH-005: Registration with Missing Fields</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Functional - Negative  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with missing email
+2. Attempt registration with missing password
+3. Attempt registration with missing full_name
+4. Verify validation errors</p>
+<p><strong>Expected Result:</strong>
+- Status: 422 for each case
+- Clear field validation errors</p>
+<hr />
+<h3>5.2 User Login</h3>
+<h4>TC-AUTH-010: Successful Login</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Functional<br />
+<strong>Preconditions:</strong> User exists in database  </p>
+<p><strong>Test Steps:</strong>
+1. Send POST request to <code>/api/auth/login</code>
+2. Provide valid credentials:
+   <code>json
+   {
+     "email": "test@example.com",
+     "password": "SecurePass123!"
+   }</code>
+3. Verify response status is 200
+4. Verify JWT token is returned
+5. Verify token contains correct user data</p>
+<p><strong>Expected Result:</strong>
+- Status: 200 OK
+- Response contains: <code>access_token</code>, <code>token_type: "bearer"</code>
+- Token is valid JWT
+- Token contains user_id, email, role</p>
+<hr />
+<h4>TC-AUTH-011: Login with Incorrect Password</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with correct email, wrong password
+2. Verify response status is 401
+3. Verify error message doesn't reveal if email exists</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Generic error: "Invalid credentials"
+- No information leakage</p>
+<hr />
+<h4>TC-AUTH-012: Login with Non-existent Email</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Functional - Negative  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with email that doesn't exist
+2. Verify response status is 401
+3. Verify error message is generic</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Generic error: "Invalid credentials"
+- Same response as wrong password (prevent email enumeration)</p>
+<hr />
+<h4>TC-AUTH-013: Login with Empty Credentials</h4>
+<p><strong>Priority:</strong> Low<br />
+<strong>Category:</strong> Functional - Negative  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with empty email
+2. Attempt login with empty password
+3. Attempt login with both empty</p>
+<p><strong>Expected Result:</strong>
+- Status: 422 Unprocessable Entity
+- Validation error for missing fields</p>
+<hr />
+<h3>5.3 Token Validation</h3>
+<h4>TC-AUTH-020: Access Protected Endpoint with Valid Token</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Functional  </p>
+<p><strong>Test Steps:</strong>
+1. Login and obtain JWT token
+2. Send request to protected endpoint with token in header:
+   <code>Authorization: Bearer &lt;token&gt;</code>
+3. Verify access is granted</p>
+<p><strong>Expected Result:</strong>
+- Status: 200 OK
+- Protected resource accessible
+- User data available in request context</p>
+<hr />
+<h4>TC-AUTH-021: Access Protected Endpoint without Token</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Send request to protected endpoint without Authorization header
+2. Verify access is denied</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Error: "Not authenticated"
+- No access to protected resource</p>
+<hr />
+<h4>TC-AUTH-022: Access Protected Endpoint with Invalid Token</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Send request with malformed token
+2. Send request with expired token
+3. Send request with tampered token
+4. Verify all are rejected</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Clear error message
+- No access granted</p>
+<hr />
+<h4>TC-AUTH-023: Token Expiration</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Generate token with short expiry (for testing)
+2. Wait for token to expire
+3. Attempt to use expired token
+4. Verify access is denied</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Error: "Token expired"
+- User must re-authenticate</p>
+<hr />
+<h3>5.4 Role-Based Access Control</h3>
+<h4>TC-AUTH-030: Admin Access to Admin Endpoints</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Functional  </p>
+<p><strong>Test Steps:</strong>
+1. Login as admin user
+2. Access admin-only endpoints
+3. Verify access is granted</p>
+<p><strong>Expected Result:</strong>
+- Status: 200 OK
+- Admin operations successful</p>
+<hr />
+<h4>TC-AUTH-031: User Access to Admin Endpoints</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Login as regular user
+2. Attempt to access admin-only endpoints
+3. Verify access is denied</p>
+<p><strong>Expected Result:</strong>
+- Status: 403 Forbidden
+- Error: "Admin access required"
+- No admin operations performed</p>
+<hr />
+<h4>TC-AUTH-032: Unauthenticated Access to Admin Endpoints</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt to access admin endpoints without token
+2. Verify access is denied</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- No access to admin resources</p>
+<hr />
+<h3>5.5 Password Security</h3>
+<h4>TC-AUTH-040: Password Hashing</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Register new user
+2. Query database directly
+3. Verify password is hashed
+4. Verify hash is bcrypt format
+5. Verify plain password is not stored</p>
+<p><strong>Expected Result:</strong>
+- Password field contains bcrypt hash
+- Hash starts with "$2b$"
+- Plain password not visible anywhere</p>
+<hr />
+<h4>TC-AUTH-041: Password Verification</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Register user with password "Test123!"
+2. Login with same password
+3. Verify bcrypt verification succeeds
+4. Login with wrong password
+5. Verify bcrypt verification fails</p>
+<p><strong>Expected Result:</strong>
+- Correct password: Login successful
+- Wrong password: Login fails
+- Hash verification working correctly</p>
+<hr />
+<h2>6. Security Test Cases</h2>
+<h3>6.1 SQL Injection</h3>
+<h4>TC-SEC-001: SQL Injection in Email Field</h4>
+<p><strong>Priority:</strong> Critical<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with SQL injection payloads:
+   - <code>admin' OR '1'='1</code>
+   - <code>admin'--</code>
+   - <code>admin' OR 1=1--</code>
+   - <code>'; DROP TABLE users;--</code>
+2. Verify all attempts fail safely</p>
+<p><strong>Expected Result:</strong>
+- All attempts return 401 or 422
+- No SQL execution
+- No database modification
+- No error revealing database structure</p>
+<hr />
+<h4>TC-SEC-002: SQL Injection in Password Field</h4>
+<p><strong>Priority:</strong> Critical<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with SQL injection in password field
+2. Verify injection is prevented</p>
+<p><strong>Expected Result:</strong>
+- Login fails
+- No SQL injection successful
+- Generic error message</p>
+<hr />
+<h3>6.2 Cross-Site Scripting (XSS)</h3>
+<h4>TC-SEC-010: XSS in Registration Fields</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with XSS payloads in full_name:
+   - <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+   - <code>&lt;img src=x onerror=alert('XSS')&gt;</code>
+   - <code>javascript:alert('XSS')</code>
+2. Verify payloads are sanitized or escaped</p>
+<p><strong>Expected Result:</strong>
+- Data stored safely
+- No script execution
+- Proper escaping when displayed</p>
+<hr />
+<h3>6.3 Brute Force Protection</h3>
+<h4>TC-SEC-020: Brute Force Login Attempts</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt login with wrong password 10 times
+2. Verify if rate limiting is applied
+3. Check if account is locked
+4. Verify legitimate user can still login after cooldown</p>
+<p><strong>Expected Result:</strong>
+- Rate limiting applied after N attempts
+- Temporary account lock or IP block
+- Clear error message
+- Account unlocks after timeout</p>
+<p><strong>Current Status:</strong> ⚠️ Not implemented - Recommendation needed</p>
+<hr />
+<h3>6.4 Token Security</h3>
+<h4>TC-SEC-030: Token Tampering</h4>
+<p><strong>Priority:</strong> Critical<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Obtain valid JWT token
+2. Decode token
+3. Modify payload (e.g., change role to admin)
+4. Re-encode token
+5. Attempt to use tampered token</p>
+<p><strong>Expected Result:</strong>
+- Status: 401 Unauthorized
+- Token signature validation fails
+- No access granted
+- Tampering detected</p>
+<hr />
+<h4>TC-SEC-031: Token Reuse After Logout</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Login and obtain token
+2. Logout
+3. Attempt to use old token</p>
+<p><strong>Expected Result:</strong>
+- Token should be invalidated (if logout implemented)
+- Or token expires naturally</p>
+<p><strong>Current Status:</strong> ⚠️ Token blacklist not implemented</p>
+<hr />
+<h3>6.5 Information Disclosure</h3>
+<h4>TC-SEC-040: Error Message Information Leakage</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Trigger various error conditions
+2. Examine error messages
+3. Verify no sensitive information disclosed</p>
+<p><strong>Expected Result:</strong>
+- Generic error messages
+- No stack traces in production
+- No database structure revealed
+- No user enumeration possible</p>
+<hr />
+<h4>TC-SEC-041: Password in Response</h4>
+<p><strong>Priority:</strong> Critical<br />
+<strong>Category:</strong> Security  </p>
+<p><strong>Test Steps:</strong>
+1. Register user
+2. Login user
+3. Get user profile
+4. Verify password never appears in any response</p>
+<p><strong>Expected Result:</strong>
+- Password field excluded from all responses
+- Only hashed password in database
+- No password in logs</p>
+<hr />
+<h2>7. Edge Cases and Boundary Testing</h2>
+<h3>7.1 Input Boundaries</h3>
+<h4>TC-EDGE-001: Maximum Email Length</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Boundary  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with 255-character email
+2. Attempt registration with 256-character email
+3. Verify behavior at boundary</p>
+<p><strong>Expected Result:</strong>
+- 255 chars: Accepted (if within limit)
+- 256 chars: Rejected with validation error</p>
+<hr />
+<h4>TC-EDGE-002: Maximum Password Length</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Boundary  </p>
+<p><strong>Test Steps:</strong>
+1. Register with 72-character password (bcrypt limit)
+2. Register with 73-character password
+3. Verify bcrypt handles correctly</p>
+<p><strong>Expected Result:</strong>
+- Both should work
+- Bcrypt truncates at 72 chars
+- Or explicit limit enforced</p>
+<hr />
+<h4>TC-EDGE-003: Minimum Password Length</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Boundary  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt registration with 7-character password
+2. Attempt registration with 8-character password
+3. Verify minimum enforced</p>
+<p><strong>Expected Result:</strong>
+- 7 chars: Rejected
+- 8 chars: Accepted
+- Clear validation message</p>
+<hr />
+<h3>7.2 Special Characters</h3>
+<h4>TC-EDGE-010: Special Characters in Email</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Edge Case  </p>
+<p><strong>Test Steps:</strong>
+1. Register with emails containing:
+   - Plus sign: <code>user+tag@example.com</code>
+   - Dots: <code>first.last@example.com</code>
+   - Underscores: <code>user_name@example.com</code>
+2. Verify all valid formats accepted</p>
+<p><strong>Expected Result:</strong>
+- Valid email formats accepted
+- RFC 5322 compliance</p>
+<hr />
+<h4>TC-EDGE-011: Unicode Characters in Name</h4>
+<p><strong>Priority:</strong> Low<br />
+<strong>Category:</strong> Edge Case  </p>
+<p><strong>Test Steps:</strong>
+1. Register with names containing:
+   - Chinese characters: <code>李明</code>
+   - Arabic: <code>محمد</code>
+   - Emoji: <code>John 😊</code>
+   - Accents: <code>José García</code>
+2. Verify handling</p>
+<p><strong>Expected Result:</strong>
+- UTF-8 characters stored correctly
+- Display correctly
+- No encoding issues</p>
+<hr />
+<h3>7.3 Concurrent Operations</h3>
+<h4>TC-EDGE-020: Simultaneous Registration</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Concurrency  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt to register same email from two clients simultaneously
+2. Verify only one succeeds</p>
+<p><strong>Expected Result:</strong>
+- One registration succeeds
+- Other gets "Email already registered"
+- No duplicate users created
+- Database constraint enforced</p>
+<hr />
+<h4>TC-EDGE-021: Simultaneous Login</h4>
+<p><strong>Priority:</strong> Low<br />
+<strong>Category:</strong> Concurrency  </p>
+<p><strong>Test Steps:</strong>
+1. Login from multiple devices/browsers simultaneously
+2. Verify all sessions work independently</p>
+<p><strong>Expected Result:</strong>
+- Multiple sessions allowed
+- Each gets unique token
+- All tokens valid</p>
+<hr />
+<h3>7.4 Database Edge Cases</h3>
+<h4>TC-EDGE-030: Database Connection Loss</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Error Handling  </p>
+<p><strong>Test Steps:</strong>
+1. Simulate database connection failure
+2. Attempt registration
+3. Verify graceful error handling</p>
+<p><strong>Expected Result:</strong>
+- Status: 500 Internal Server Error
+- Generic error message
+- No data corruption
+- System recovers when DB available</p>
+<hr />
+<h4>TC-EDGE-031: Database Full</h4>
+<p><strong>Priority:</strong> Low<br />
+<strong>Category:</strong> Error Handling  </p>
+<p><strong>Test Steps:</strong>
+1. Simulate database storage full
+2. Attempt registration
+3. Verify error handling</p>
+<p><strong>Expected Result:</strong>
+- Appropriate error status
+- Clear error message
+- No partial data written</p>
+<hr />
+<h2>8. Performance Testing</h2>
+<h3>8.1 Response Time</h3>
+<h4>TC-PERF-001: Registration Response Time</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Performance  </p>
+<p><strong>Test Steps:</strong>
+1. Measure time for registration request
+2. Repeat 100 times
+3. Calculate average, min, max</p>
+<p><strong>Expected Result:</strong>
+- Average &lt; 500ms
+- 95th percentile &lt; 1000ms
+- No timeouts</p>
+<hr />
+<h4>TC-PERF-002: Login Response Time</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Performance  </p>
+<p><strong>Test Steps:</strong>
+1. Measure time for login request
+2. Repeat 100 times
+3. Calculate statistics</p>
+<p><strong>Expected Result:</strong>
+- Average &lt; 300ms
+- 95th percentile &lt; 500ms
+- Consistent performance</p>
+<hr />
+<h3>8.2 Load Testing</h3>
+<h4>TC-PERF-010: Concurrent Registrations</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Load  </p>
+<p><strong>Test Steps:</strong>
+1. Simulate 100 concurrent registration requests
+2. Measure success rate and response times
+3. Verify system stability</p>
+<p><strong>Expected Result:</strong>
+- 100% success rate
+- Response times within acceptable range
+- No errors or crashes</p>
+<hr />
+<h4>TC-PERF-011: Concurrent Logins</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Load  </p>
+<p><strong>Test Steps:</strong>
+1. Simulate 500 concurrent login requests
+2. Measure performance
+3. Verify system handles load</p>
+<p><strong>Expected Result:</strong>
+- High success rate (&gt;95%)
+- Acceptable response times
+- System remains stable</p>
+<hr />
+<h3>8.3 Stress Testing</h3>
+<h4>TC-PERF-020: Maximum User Load</h4>
+<p><strong>Priority:</strong> Low<br />
+<strong>Category:</strong> Stress  </p>
+<p><strong>Test Steps:</strong>
+1. Gradually increase concurrent users
+2. Find breaking point
+3. Verify graceful degradation</p>
+<p><strong>Expected Result:</strong>
+- System handles expected load
+- Graceful degradation under extreme load
+- Recovery after load reduction</p>
+<hr />
+<h2>9. Integration Testing</h2>
+<h3>9.1 Frontend-Backend Integration</h3>
+<h4>TC-INT-001: Registration Form Integration</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Integration  </p>
+<p><strong>Test Steps:</strong>
+1. Fill registration form in UI
+2. Submit form
+3. Verify API call made correctly
+4. Verify UI updates appropriately</p>
+<p><strong>Expected Result:</strong>
+- Form data sent correctly
+- Success message displayed
+- User redirected or logged in
+- Error messages displayed if fails</p>
+<hr />
+<h4>TC-INT-002: Login Form Integration</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Integration  </p>
+<p><strong>Test Steps:</strong>
+1. Fill login form in UI
+2. Submit form
+3. Verify token stored
+4. Verify UI updates</p>
+<p><strong>Expected Result:</strong>
+- Credentials sent securely
+- Token stored in localStorage/cookies
+- User context updated
+- Navigation to protected pages works</p>
+<hr />
+<h3>9.2 Booking System Integration</h3>
+<h4>TC-INT-010: Authenticated Booking Creation</h4>
+<p><strong>Priority:</strong> High<br />
+<strong>Category:</strong> Integration  </p>
+<p><strong>Test Steps:</strong>
+1. Login as user
+2. Create booking
+3. Verify booking associated with user
+4. Verify user_email included</p>
+<p><strong>Expected Result:</strong>
+- Booking created successfully
+- user_email field populated
+- Booking visible in user's bookings
+- Authorization enforced</p>
+<hr />
+<h4>TC-INT-011: Unauthenticated Booking Attempt</h4>
+<p><strong>Priority:</strong> Medium<br />
+<strong>Category:</strong> Integration  </p>
+<p><strong>Test Steps:</strong>
+1. Attempt to create booking without login
+2. Verify behavior</p>
+<p><strong>Expected Result:</strong>
+- Booking created with guest info (if allowed)
+- Or 401 error if authentication required</p>
+<hr />
+<h2>10. Security Vulnerabilities Assessment</h2>
+<h3>10.1 Current Vulnerabilities</h3>
+<h4>VULN-001: No Rate Limiting</h4>
+<p><strong>Severity:</strong> High<br />
+<strong>OWASP:</strong> A07:2021 – Identification and Authentication Failures</p>
+<p><strong>Description:</strong>
+The authentication endpoints do not implement rate limiting, making them vulnerable to brute force attacks.</p>
+<p><strong>Impact:</strong>
+- Attackers can attempt unlimited login attempts
+- Password guessing attacks possible
+- Account enumeration possible
+- Denial of service through resource exhaustion</p>
+<p><strong>Mitigation:</strong>
+1. Implement rate limiting middleware
+2. Limit login attempts per IP (e.g., 5 attempts per 15 minutes)
+3. Implement account lockout after N failed attempts
+4. Add CAPTCHA after multiple failures
+5. Monitor and alert on suspicious patterns</p>
+<p><strong>Recommended Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">slowapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Limiter</span><span class="p">,</span> <span class="n">_rate_limit_exceeded_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">slowapi.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_remote_address</span>
+
+<span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">key_func</span><span class="o">=</span><span class="n">get_remote_address</span><span class="p">)</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="nd">@limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="s2">&quot;5/minute&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="c1"># ... existing code</span>
+</code></pre></div>
+
+<hr />
+<h4>VULN-002: No Token Blacklist</h4>
+<p><strong>Severity:</strong> Medium<br />
+<strong>OWASP:</strong> A07:2021 – Identification and Authentication Failures</p>
+<p><strong>Description:</strong>
+JWT tokens remain valid until expiration even after logout. No mechanism to invalidate tokens.</p>
+<p><strong>Impact:</strong>
+- Stolen tokens can be used until expiration
+- No way to force logout
+- Compromised tokens remain active</p>
+<p><strong>Mitigation:</strong>
+1. Implement token blacklist in Redis
+2. Store logout tokens with expiry
+3. Check blacklist on each request
+4. Implement refresh token rotation
+5. Use short token expiry times</p>
+<p><strong>Recommended Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Store in Redis</span>
+<span class="k">await</span> <span class="n">redis</span><span class="o">.</span><span class="n">setex</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blacklist:</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">expiry_time</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check on each request</span>
+<span class="k">if</span> <span class="k">await</span> <span class="n">redis</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blacklist:</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Token invalidated&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h4>VULN-003: Weak Password Policy</h4>
+<p><strong>Severity:</strong> Medium<br />
+<strong>OWASP:</strong> A07:2021 – Identification and Authentication Failures</p>
+<p><strong>Description:</strong>
+No enforcement of password complexity requirements. Only minimum length checked.</p>
+<p><strong>Impact:</strong>
+- Users can set weak passwords
+- Easier to crack passwords
+- Increased risk of account compromise</p>
+<p><strong>Mitigation:</strong>
+1. Enforce password complexity:
+   - Minimum 8 characters
+   - At least one uppercase letter
+   - At least one lowercase letter
+   - At least one number
+   - At least one special character
+2. Check against common password lists
+3. Implement password strength meter in UI
+4. Enforce password history (no reuse)</p>
+<p><strong>Recommended Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_password_strength</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[!@#$%^&amp;*(),.?</span><span class="se">\&quot;</span><span class="s2">:</span><span class="si">{}</span><span class="s2">|&lt;&gt;]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+
+<hr />
+<h4>VULN-004: No HTTPS Enforcement</h4>
+<p><strong>Severity:</strong> Critical<br />
+<strong>OWASP:</strong> A02:2021 – Cryptographic Failures</p>
+<p><strong>Description:</strong>
+Application may run over HTTP, exposing credentials and tokens in transit.</p>
+<p><strong>Impact:</strong>
+- Credentials sent in plaintext
+- Tokens intercepted
+- Man-in-the-middle attacks possible
+- Session hijacking</p>
+<p><strong>Mitigation:</strong>
+1. Enforce HTTPS in production
+2. Set HSTS headers
+3. Redirect HTTP to HTTPS
+4. Use secure cookies
+5. Set SameSite cookie attribute</p>
+<p><strong>Recommended Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.middleware.httpsredirect</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPSRedirectMiddleware</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">HTTPSRedirectMiddleware</span><span class="p">)</span>
+
+<span class="c1"># Set secure headers</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">middleware</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_security_headers</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Strict-Transport-Security&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;max-age=31536000&quot;</span>
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+
+<hr />
+<h4>VULN-005: No Input Sanitization</h4>
+<p><strong>Severity:</strong> Medium<br />
+<strong>OWASP:</strong> A03:2021 – Injection</p>
+<p><strong>Description:</strong>
+User inputs are not sanitized, potentially allowing XSS or other injection attacks.</p>
+<p><strong>Impact:</strong>
+- XSS attacks possible
+- Data corruption
+- Script injection in stored data</p>
+<p><strong>Mitigation:</strong>
+1. Sanitize all user inputs
+2. Escape HTML characters
+3. Validate input formats strictly
+4. Use parameterized queries
+5. Implement Content Security Policy</p>
+<p><strong>Recommended Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bleach</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_input</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">bleach</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[],</span> <span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># In models</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">full_name</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sanitize_input</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h4>VULN-006: Verbose Error Messages</h4>
+<p><strong>Severity:</strong> Low<br />
+<strong>OWASP:</strong> A05:2021 – Security Misconfiguration</p>
+<p><strong>Description:</strong>
+Error messages may reveal system information in development mode.</p>
+<p><strong>Impact:</strong>
+- Information disclosure
+- System architecture revealed
+- Easier for attackers to find vulnerabilities</p>
+<p><strong>Mitigation:</strong>
+1. Use generic error messages in production
+2. Log detailed errors server-side only
+3. Disable debug mode in production
+4. Implement custom error handlers</p>
+<hr />
+<h4>VULN-007: No Account Enumeration Protection</h4>
+<p><strong>Severity:</strong> Low<br />
+<strong>OWASP:</strong> A07:2021 – Identification and Authentication Failures</p>
+<p><strong>Description:</strong>
+Different responses for "user not found" vs "wrong password" allow account enumeration.</p>
+<p><strong>Impact:</strong>
+- Attackers can identify valid email addresses
+- Targeted attacks on known accounts
+- Privacy concerns</p>
+<p><strong>Mitigation:</strong>
+1. Use same error message for all login failures
+2. Same response time for all failures
+3. Implement timing-safe comparisons</p>
+<p><strong>Current Status:</strong> ✅ Partially implemented (generic error messages)</p>
+<hr />
+<h3>10.2 Security Best Practices Checklist</h3>
+<p><strong>Authentication:</strong>
+- ✅ Passwords hashed with bcrypt
+- ✅ JWT tokens for session management
+- ✅ Token signature verification
+- ⚠️ Token expiration implemented (needs testing)
+- ❌ No refresh token mechanism
+- ❌ No token blacklist
+- ❌ No rate limiting</p>
+<p><strong>Authorization:</strong>
+- ✅ Role-based access control
+- ✅ Admin-only endpoints protected
+- ✅ User context in requests
+- ⚠️ Need more granular permissions</p>
+<p><strong>Input Validation:</strong>
+- ✅ Email format validation
+- ✅ Required fields validation
+- ⚠️ Password strength validation (basic)
+- ❌ No input sanitization
+- ❌ No length limits enforced</p>
+<p><strong>Data Protection:</strong>
+- ✅ Passwords never in responses
+- ✅ Hashed passwords in database
+- ⚠️ HTTPS enforcement (deployment dependent)
+- ❌ No field-level encryption
+- ❌ No PII protection</p>
+<p><strong>Error Handling:</strong>
+- ✅ Generic error messages
+- ⚠️ Debug mode control needed
+- ❌ No error rate monitoring
+- ❌ No alerting on suspicious activity</p>
+<p><strong>Monitoring &amp; Logging:</strong>
+- ❌ No authentication attempt logging
+- ❌ No failed login monitoring
+- ❌ No suspicious activity detection
+- ❌ No audit trail</p>
+<hr />
+<h2>11. Test Environment</h2>
+<h3>11.1 Test Environments</h3>
+<p><strong>Development:</strong>
+- Local development machines
+- Mock database
+- Debug mode enabled
+- Detailed logging</p>
+<p><strong>Staging:</strong>
+- Staging server
+- Test database
+- Production-like configuration
+- Limited logging</p>
+<p><strong>Production:</strong>
+- Production servers
+- Production database
+- Minimal logging
+- Monitoring enabled</p>
+<h3>11.2 Test Tools</h3>
+<p><strong>Backend Testing:</strong>
+- pytest - Unit and integration testing
+- pytest-asyncio - Async test support
+- httpx - HTTP client for API testing
+- pytest-cov - Code coverage
+- locust - Load testing</p>
+<p><strong>Security Testing:</strong>
+- OWASP ZAP - Vulnerability scanning
+- Burp Suite - Penetration testing
+- sqlmap - SQL injection testing
+- JWT.io - Token inspection</p>
+<p><strong>Frontend Testing:</strong>
+- Jest - Unit testing
+- React Testing Library - Component testing
+- Cypress - E2E testing
+- Playwright - Browser automation</p>
+<hr />
+<h2>12. Test Data</h2>
+<h3>12.1 Valid Test Users</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;regular_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user@test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Test123!@#&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;full_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Test User&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;admin_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin@test.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin123!@#&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;full_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin User&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>12.2 Invalid Test Data</h3>
+<p><strong>Invalid Emails:</strong>
+- <code>notanemail</code>
+- <code>@nodomain.com</code>
+- <code>user@</code>
+- <code>user @domain.com</code></p>
+<p><strong>Weak Passwords:</strong>
+- <code>123</code> (too short)
+- <code>password</code> (common)
+- <code>12345678</code> (only numbers)</p>
+<p><strong>SQL Injection Payloads:</strong>
+- <code>admin' OR '1'='1</code>
+- <code>admin'--</code>
+- <code>'; DROP TABLE users;--</code></p>
+<p><strong>XSS Payloads:</strong>
+- <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+- <code>&lt;img src=x onerror=alert('XSS')&gt;</code>
+- <code>javascript:alert('XSS')</code></p>
+<hr />
+<h2>13. Test Execution Schedule</h2>
+<h3>13.1 Test Phases</h3>
+<p><strong>Phase 1: Unit Testing (Week 1)</strong>
+- Individual function testing
+- Password hashing tests
+- Token generation tests
+- Validation function tests</p>
+<p><strong>Phase 2: Integration Testing (Week 2)</strong>
+- API endpoint testing
+- Database integration
+- Frontend-backend integration</p>
+<p><strong>Phase 3: Security Testing (Week 3)</strong>
+- Vulnerability scanning
+- Penetration testing
+- Security audit</p>
+<p><strong>Phase 4: Performance Testing (Week 4)</strong>
+- Load testing
+- Stress testing
+- Response time testing</p>
+<p><strong>Phase 5: User Acceptance Testing (Week 5)</strong>
+- End-to-end workflows
+- Real user scenarios
+- Final validation</p>
+<hr />
+<h2>14. Defect Management</h2>
+<h3>14.1 Severity Levels</h3>
+<p><strong>Critical:</strong>
+- System crash
+- Data loss
+- Security breach
+- Authentication bypass</p>
+<p><strong>High:</strong>
+- Major functionality broken
+- Security vulnerability
+- Data corruption</p>
+<p><strong>Medium:</strong>
+- Feature not working as expected
+- Performance issues
+- Usability problems</p>
+<p><strong>Low:</strong>
+- Minor UI issues
+- Cosmetic problems
+- Enhancement requests</p>
+<h3>14.2 Defect Workflow</h3>
+<ol>
+<li><strong>Reported</strong> - Defect identified and logged</li>
+<li><strong>Triaged</strong> - Severity and priority assigned</li>
+<li><strong>Assigned</strong> - Developer assigned</li>
+<li><strong>In Progress</strong> - Fix being developed</li>
+<li><strong>Fixed</strong> - Fix completed</li>
+<li><strong>Testing</strong> - Fix being verified</li>
+<li><strong>Closed</strong> - Fix verified and accepted</li>
+</ol>
+<hr />
+<h2>15. Test Metrics</h2>
+<h3>15.1 Key Metrics</h3>
+<p><strong>Test Coverage:</strong>
+- Line coverage: Target 95%
+- Branch coverage: Target 90%
+- Function coverage: Target 100%</p>
+<p><strong>Test Execution:</strong>
+- Total test cases: TBD
+- Passed: TBD
+- Failed: TBD
+- Blocked: TBD
+- Pass rate: Target 100%</p>
+<p><strong>Defect Metrics:</strong>
+- Total defects found: TBD
+- Critical defects: Target 0
+- High severity defects: Target 0
+- Defect density: TBD
+- Defect resolution time: TBD</p>
+<p><strong>Performance Metrics:</strong>
+- Average response time: Target &lt; 300ms
+- 95th percentile: Target &lt; 500ms
+- Throughput: Target 1000 req/sec
+- Error rate: Target &lt; 0.1%</p>
+<hr />
+<h2>16. Appendix</h2>
+<h3>16.1 References</h3>
+<ul>
+<li>OWASP Top 10 2021</li>
+<li>JWT Best Practices (RFC 8725)</li>
+<li>NIST Password Guidelines</li>
+<li>FastAPI Security Documentation</li>
+<li>bcrypt Documentation</li>
+</ul>
+<h3>16.2 Glossary</h3>
+<p><strong>JWT:</strong> JSON Web Token - Token-based authentication standard<br />
+<strong>bcrypt:</strong> Password hashing algorithm<br />
+<strong>RBAC:</strong> Role-Based Access Control<br />
+<strong>XSS:</strong> Cross-Site Scripting<br />
+<strong>CSRF:</strong> Cross-Site Request Forgery<br />
+<strong>OWASP:</strong> Open Web Application Security Project<br />
+<strong>HSTS:</strong> HTTP Strict Transport Security  </p>
+<h3>16.3 Test Case Traceability Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Test Cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User Registration</td>
+<td>TC-AUTH-001 to TC-AUTH-005</td>
+</tr>
+<tr>
+<td>User Login</td>
+<td>TC-AUTH-010 to TC-AUTH-013</td>
+</tr>
+<tr>
+<td>Token Validation</td>
+<td>TC-AUTH-020 to TC-AUTH-023</td>
+</tr>
+<tr>
+<td>RBAC</td>
+<td>TC-AUTH-030 to TC-AUTH-032</td>
+</tr>
+<tr>
+<td>Password Security</td>
+<td>TC-AUTH-040 to TC-AUTH-041</td>
+</tr>
+<tr>
+<td>SQL Injection Prevention</td>
+<td>TC-SEC-001 to TC-SEC-002</td>
+</tr>
+<tr>
+<td>XSS Prevention</td>
+<td>TC-SEC-010</td>
+</tr>
+<tr>
+<td>Token Security</td>
+<td>TC-SEC-030 to TC-SEC-031</td>
+</tr>
+<tr>
+<td>Information Security</td>
+<td>TC-SEC-040 to TC-SEC-041</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Document Approval</h2>
+<p><strong>Prepared by:</strong> QA Team<br />
+<strong>Reviewed by:</strong> Security Team<br />
+<strong>Approved by:</strong> Project Manager<br />
+<strong>Date:</strong> February 2026<br />
+<strong>Version:</strong> 1.0</p>
+<hr />
+<p><strong>End of Test Plan</strong></p>
+    </div>
+</body>
+</html>

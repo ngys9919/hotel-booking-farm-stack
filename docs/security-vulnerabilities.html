@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Vulnerabilities - Authentication Test Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
+        h3 { color: #7f8c8d; margin-top: 20px; }
+        code {
+            background: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin-left: 0;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .nav {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            color: #5dade2;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">← Home</a>
+        <a href="test-plan.html">Test Plan</a>
+        <a href="security-vulnerabilities.html">Security</a>
+        <a href="test-execution-report.html">Report</a>
+        <a href="https://github.com/ngys9919/hotel-booking-farm-stack" target="_blank">GitHub →</a>
+    </div>
+    <div class="container">
+        <h1>Security Vulnerabilities Assessment and Remediation Guide</h1>
+<h2>Document Information</h2>
+<p><strong>Project:</strong> Luxury Haven Hotel Booking System<br />
+<strong>Component:</strong> Authentication System Security Assessment<br />
+<strong>Version:</strong> 1.0<br />
+<strong>Date:</strong> February 2026<br />
+<strong>Classification:</strong> Internal - Security Sensitive<br />
+<strong>Status:</strong> Active</p>
+<hr />
+<h2>Executive Summary</h2>
+<p>This document provides a comprehensive security assessment of the authentication system, identifying current vulnerabilities, their potential impact, and detailed remediation strategies. The assessment is based on OWASP Top 10 2021 standards and industry best practices.</p>
+<h3>Risk Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Count</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Critical</td>
+<td>1</td>
+<td>Needs Immediate Action</td>
+</tr>
+<tr>
+<td>High</td>
+<td>2</td>
+<td>Needs Action</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>4</td>
+<td>Should Fix</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>3</td>
+<td>Nice to Have</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>10</strong></td>
+<td><strong>7 Need Action</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-critical-vulnerabilities">Critical Vulnerabilities</a></li>
+<li><a href="#2-high-severity-vulnerabilities">High Severity Vulnerabilities</a></li>
+<li><a href="#3-medium-severity-vulnerabilities">Medium Severity Vulnerabilities</a></li>
+<li><a href="#4-low-severity-vulnerabilities">Low Severity Vulnerabilities</a></li>
+<li><a href="#5-remediation-roadmap">Remediation Roadmap</a></li>
+<li><a href="#6-security-hardening-checklist">Security Hardening Checklist</a></li>
+<li><a href="#7-monitoring-and-detection">Monitoring and Detection</a></li>
+<li><a href="#8-incident-response-plan">Incident Response Plan</a></li>
+</ol>
+<hr />
+<h2>1. Critical Vulnerabilities</h2>
+<h3>VULN-CRIT-001: No HTTPS Enforcement</h3>
+<p><strong>OWASP Category:</strong> A02:2021 – Cryptographic Failures<br />
+<strong>CWE:</strong> CWE-319 - Cleartext Transmission of Sensitive Information<br />
+<strong>CVSS Score:</strong> 9.1 (Critical)<br />
+<strong>Status:</strong> ❌ Not Implemented</p>
+<h4>Description</h4>
+<p>The application does not enforce HTTPS, allowing credentials and authentication tokens to be transmitted in plaintext over HTTP connections.</p>
+<h4>Technical Details</h4>
+<p><strong>Current Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># main.py - No HTTPS enforcement</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Hotel Booking API&quot;</span><span class="p">)</span>
+
+<span class="c1"># Tokens and passwords transmitted without encryption</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="c1"># Credentials received over potentially insecure HTTP</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Attack Scenario:</strong>
+1. User connects to application over public WiFi
+2. Attacker performs man-in-the-middle (MITM) attack
+3. Attacker intercepts HTTP traffic
+4. Credentials and JWT tokens captured in plaintext
+5. Attacker gains unauthorized access to user account</p>
+<h4>Impact Assessment</h4>
+<p><strong>Confidentiality:</strong> HIGH
+- User credentials exposed
+- JWT tokens intercepted
+- Personal information leaked</p>
+<p><strong>Integrity:</strong> HIGH
+- Session hijacking possible
+- Account takeover risk
+- Data modification attacks</p>
+<p><strong>Availability:</strong> MEDIUM
+- Denial of service through session manipulation</p>
+<p><strong>Business Impact:</strong>
+- Regulatory compliance violations (GDPR, PCI-DSS)
+- Loss of customer trust
+- Legal liability
+- Reputational damage
+- Financial losses</p>
+<h4>Exploitation Difficulty</h4>
+<p><strong>Skill Level Required:</strong> Low<br />
+<strong>Tools Required:</strong> Wireshark, Burp Suite, mitmproxy<br />
+<strong>Time to Exploit:</strong> &lt; 5 minutes<br />
+<strong>Detection Difficulty:</strong> Easy (if monitoring in place)</p>
+<h4>Remediation</h4>
+<p><strong>Priority:</strong> IMMEDIATE (Fix within 24 hours)</p>
+<p><strong>Step 1: Enable HTTPS Redirect</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.middleware.httpsredirect</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPSRedirectMiddleware</span>
+
+<span class="c1"># Add HTTPS redirect middleware</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">HTTPSRedirectMiddleware</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Step 2: Configure HSTS Headers</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.middleware.trustedhost</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustedHostMiddleware</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">middleware</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_security_headers</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="c1"># Strict Transport Security</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Strict-Transport-Security&quot;</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="s2">&quot;max-age=31536000; includeSubDomains; preload&quot;</span>
+
+    <span class="c1"># Additional security headers</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Content-Type-Options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;nosniff&quot;</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Frame-Options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DENY&quot;</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-XSS-Protection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1; mode=block&quot;</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Referrer-Policy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;strict-origin-when-cross-origin&quot;</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+
+<p><strong>Step 3: Configure SSL/TLS Certificate</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Using Let&#39;s Encrypt</span>
+sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w"> </span>-d<span class="w"> </span>yourdomain.com<span class="w"> </span>-d<span class="w"> </span>www.yourdomain.com
+
+<span class="c1"># Or using uvicorn with SSL</span>
+uvicorn<span class="w"> </span>main:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">443</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ssl-keyfile<span class="o">=</span>/path/to/key.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ssl-certfile<span class="o">=</span>/path/to/cert.pem
+</code></pre></div>
+
+<p><strong>Step 4: Update Frontend Configuration</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// api.js - Enforce HTTPS</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">API_BASE_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;production&#39;</span>
+<span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;https://api.yourdomain.com&#39;</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;http://localhost:8000&#39;</span><span class="p">;</span>
+
+<span class="c1">// Reject non-HTTPS in production</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;production&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>
+<span class="w">    </span><span class="o">!</span><span class="nx">API_BASE_URL</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;HTTPS required in production&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Step 5: Configure Secure Cookies</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">):</span>
+    <span class="c1"># ... authentication logic ...</span>
+
+    <span class="c1"># Set secure cookie</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;access_token&quot;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+        <span class="n">httponly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># HTTPS only</span>
+        <span class="n">samesite</span><span class="o">=</span><span class="s2">&quot;strict&quot;</span><span class="p">,</span>
+        <span class="n">max_age</span><span class="o">=</span><span class="mi">3600</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Login successful&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<h4>Verification</h4>
+<p><strong>Test 1: HTTP Redirect</strong></p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-I<span class="w"> </span>http://yourdomain.com
+<span class="c1"># Should return 307 redirect to https://</span>
+</code></pre></div>
+
+<p><strong>Test 2: HSTS Header</strong></p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-I<span class="w"> </span>https://yourdomain.com
+<span class="c1"># Should include: Strict-Transport-Security: max-age=31536000</span>
+</code></pre></div>
+
+<p><strong>Test 3: SSL Certificate</strong></p>
+<div class="codehilite"><pre><span></span><code>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>yourdomain.com:443<span class="w"> </span>-servername<span class="w"> </span>yourdomain.com
+<span class="c1"># Should show valid certificate</span>
+</code></pre></div>
+
+<h4>Cost-Benefit Analysis</h4>
+<p><strong>Implementation Cost:</strong> Low (1-2 hours)<br />
+<strong>Maintenance Cost:</strong> Low (automatic renewal with Let's Encrypt)<br />
+<strong>Risk Reduction:</strong> Critical (eliminates MITM attacks)<br />
+<strong>ROI:</strong> Extremely High</p>
+<hr />
+<h2>2. High Severity Vulnerabilities</h2>
+<h3>VULN-HIGH-001: No Rate Limiting on Authentication Endpoints</h3>
+<p><strong>OWASP Category:</strong> A07:2021 – Identification and Authentication Failures<br />
+<strong>CWE:</strong> CWE-307 - Improper Restriction of Excessive Authentication Attempts<br />
+<strong>CVSS Score:</strong> 7.5 (High)<br />
+<strong>Status:</strong> ❌ Not Implemented</p>
+<h4>Description</h4>
+<p>Authentication endpoints lack rate limiting, allowing unlimited login attempts and enabling brute force attacks on user accounts.</p>
+<h4>Technical Details</h4>
+<p><strong>Current Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="c1"># No rate limiting - unlimited attempts allowed</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">authenticate_user</span><span class="p">(</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">,</span> <span class="n">credentials</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">)}</span>
+</code></pre></div>
+
+<p><strong>Attack Scenario:</strong>
+1. Attacker obtains list of email addresses
+2. Uses automated tool to attempt passwords
+3. Tests 1000s of passwords per minute
+4. Eventually finds valid credentials
+5. Gains unauthorized access</p>
+<h4>Impact Assessment</h4>
+<p><strong>Confidentiality:</strong> HIGH
+- Account compromise through password guessing
+- Access to personal data
+- Exposure of booking information</p>
+<p><strong>Integrity:</strong> MEDIUM
+- Unauthorized bookings
+- Account modifications</p>
+<p><strong>Availability:</strong> HIGH
+- Resource exhaustion from excessive requests
+- Denial of service
+- Database overload</p>
+<p><strong>Business Impact:</strong>
+- Customer account compromise
+- Service disruption
+- Increased infrastructure costs
+- Compliance violations</p>
+<h4>Exploitation Difficulty</h4>
+<p><strong>Skill Level Required:</strong> Low<br />
+<strong>Tools Required:</strong> Hydra, Burp Suite Intruder, custom scripts<br />
+<strong>Time to Exploit:</strong> Hours to days (depending on password strength)<br />
+<strong>Detection Difficulty:</strong> Medium (without monitoring)</p>
+<h4>Remediation</h4>
+<p><strong>Priority:</strong> HIGH (Fix within 1 week)</p>
+<p><strong>Solution 1: Implement Rate Limiting with SlowAPI</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># requirements.txt</span>
+<span class="n">slowapi</span><span class="o">==</span><span class="mf">0.1.9</span>
+
+<span class="c1"># main.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">slowapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Limiter</span><span class="p">,</span> <span class="n">_rate_limit_exceeded_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">slowapi.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_remote_address</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">slowapi.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitExceeded</span>
+
+<span class="c1"># Initialize limiter</span>
+<span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">key_func</span><span class="o">=</span><span class="n">get_remote_address</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">limiter</span> <span class="o">=</span> <span class="n">limiter</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_exception_handler</span><span class="p">(</span><span class="n">RateLimitExceeded</span><span class="p">,</span> <span class="n">_rate_limit_exceeded_handler</span><span class="p">)</span>
+
+<span class="c1"># Apply to auth routes</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="nd">@limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="s2">&quot;5/minute&quot;</span><span class="p">)</span>  <span class="c1"># 5 attempts per minute per IP</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="c1"># ... existing code ...</span>
+    <span class="k">pass</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/register&quot;</span><span class="p">)</span>
+<span class="nd">@limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="s2">&quot;3/hour&quot;</span><span class="p">)</span>  <span class="c1"># 3 registrations per hour per IP</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+    <span class="c1"># ... existing code ...</span>
+    <span class="k">pass</span>
+</code></pre></div>
+
+<p><strong>Solution 2: Implement Account Lockout</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># models.py</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">failed_login_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">locked_until</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># auth_routes.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">check_account_locked</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;locked_until&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;locked_until&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Unlock account</span>
+            <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;locked_until&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;failed_login_attempts&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="c1"># Check if account is locked</span>
+    <span class="k">if</span> <span class="k">await</span> <span class="n">check_account_locked</span><span class="p">(</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">429</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Account temporarily locked. Try again later.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">authenticate_user</span><span class="p">(</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">,</span> <span class="n">credentials</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="c1"># Increment failed attempts</span>
+        <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;failed_login_attempts&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check if should lock account</span>
+        <span class="n">user_doc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">user_doc</span> <span class="ow">and</span> <span class="n">user_doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;failed_login_attempts&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="c1"># Lock for 15 minutes</span>
+            <span class="n">lock_until</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;locked_until&quot;</span><span class="p">:</span> <span class="n">lock_until</span><span class="p">}}</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+                <span class="n">status_code</span><span class="o">=</span><span class="mi">429</span><span class="p">,</span>
+                <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Too many failed attempts. Account locked for 15 minutes.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Reset failed attempts on successful login</span>
+    <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;failed_login_attempts&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;locked_until&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">)}</span>
+</code></pre></div>
+
+<p><strong>Solution 3: Implement CAPTCHA After Failed Attempts</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Add after 3 failed attempts</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Form</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span>
+    <span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">,</span>
+    <span class="n">captcha_token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Form</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="p">):</span>
+    <span class="n">user_doc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">})</span>
+
+    <span class="c1"># Require CAPTCHA after 3 failed attempts</span>
+    <span class="k">if</span> <span class="n">user_doc</span> <span class="ow">and</span> <span class="n">user_doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;failed_login_attempts&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">captcha_token</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">verify_captcha</span><span class="p">(</span><span class="n">captcha_token</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+                <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+                <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;CAPTCHA verification required&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># ... rest of login logic ...</span>
+</code></pre></div>
+
+<p><strong>Solution 4: IP-Based Rate Limiting with Redis</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">redis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+
+<span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span><span class="s2">&quot;redis://localhost&quot;</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">check_rate_limit</span><span class="p">(</span><span class="n">ip</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if request exceeds rate limit</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ip: Client IP address</span>
+<span class="sd">        endpoint: API endpoint</span>
+<span class="sd">        limit: Maximum requests allowed</span>
+<span class="sd">        window: Time window in seconds</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if within limit, False if exceeded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ratelimit:</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">ip</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">setex</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">current</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">limit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">incr</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">check_rate_limit</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">429</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Too many login attempts. Please try again later.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ... existing login logic ...</span>
+</code></pre></div>
+
+<h4>Verification</h4>
+<p><strong>Test 1: Rate Limit Enforcement</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Attempt 10 logins in quick succession</span>
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">1</span>..10<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/api/auth/login<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;email&quot;:&quot;test@example.com&quot;,&quot;password&quot;:&quot;wrong&quot;}&#39;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="k">done</span>
+
+<span class="c1"># Should see 429 errors after 5 attempts</span>
+</code></pre></div>
+
+<p><strong>Test 2: Account Lockout</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_account_lockout</span><span class="p">():</span>
+    <span class="c1"># Attempt 6 failed logins</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;wrongpassword&quot;</span>
+        <span class="p">})</span>
+
+    <span class="c1"># 6th attempt should return 429</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span>
+    <span class="k">assert</span> <span class="s2">&quot;locked&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</code></pre></div>
+
+<h4>Monitoring</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Add logging for failed attempts</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">authenticate_user</span><span class="p">(</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">,</span> <span class="n">credentials</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed login attempt for </span><span class="si">{</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">ip</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># ... handle failed attempt ...</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successful login for </span><span class="si">{</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">ip</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">)}</span>
+</code></pre></div>
+
+<hr />
+<h3>VULN-HIGH-002: No JWT Token Blacklist</h3>
+<p><strong>OWASP Category:</strong> A07:2021 – Identification and Authentication Failures<br />
+<strong>CWE:</strong> CWE-613 - Insufficient Session Expiration<br />
+<strong>CVSS Score:</strong> 7.2 (High)<br />
+<strong>Status:</strong> ❌ Not Implemented</p>
+<h4>Description</h4>
+<p>JWT tokens remain valid until expiration even after logout. There is no mechanism to invalidate tokens, allowing compromised tokens to be used until they naturally expire.</p>
+<h4>Technical Details</h4>
+<p><strong>Current Implementation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># No logout endpoint</span>
+<span class="c1"># No token blacklist</span>
+<span class="c1"># Tokens valid until expiration (typically 24 hours)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">,</span>
+        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">to_encode</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Attack Scenario:</strong>
+1. User logs in and receives JWT token
+2. Token is stolen (XSS, network sniffing, etc.)
+3. User logs out from application
+4. Attacker can still use stolen token for 24 hours
+5. No way to revoke compromised token</p>
+<h4>Impact Assessment</h4>
+<p><strong>Confidentiality:</strong> HIGH
+- Stolen tokens remain valid
+- Unauthorized access continues after logout
+- No way to force session termination</p>
+<p><strong>Integrity:</strong> MEDIUM
+- Unauthorized actions possible
+- Data modification by compromised accounts</p>
+<p><strong>Availability:</strong> LOW
+- Minimal impact on availability</p>
+<p><strong>Business Impact:</strong>
+- Compromised accounts remain vulnerable
+- Cannot force password reset effectively
+- Compliance issues (session management requirements)</p>
+<h4>Remediation</h4>
+<p><strong>Priority:</strong> HIGH (Fix within 1 week)</p>
+<p><strong>Solution 1: Implement Token Blacklist with Redis</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># requirements.txt</span>
+<span class="n">redis</span><span class="o">==</span><span class="mf">4.5.1</span>
+
+<span class="c1"># database.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">redis</span>
+
+<span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;REDIS_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;redis://localhost:6379&quot;</span><span class="p">),</span>
+    <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># auth.py</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">blacklist_token</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expiry_seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add token to blacklist&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">setex</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;blacklist:</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">expiry_seconds</span><span class="p">,</span>
+        <span class="s2">&quot;1&quot;</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">is_token_blacklisted</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if token is blacklisted&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blacklist:</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_current_user</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">)):</span>
+    <span class="c1"># Check blacklist first</span>
+    <span class="k">if</span> <span class="k">await</span> <span class="n">is_token_blacklisted</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Token has been revoked&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ... existing token validation ...</span>
+    <span class="k">return</span> <span class="n">user</span>
+
+<span class="c1"># auth_routes.py</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/logout&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">logout</span><span class="p">(</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">),</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logout user and blacklist token&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Decode token to get expiry</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">ALGORITHM</span><span class="p">])</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exp&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exp</span><span class="p">:</span>
+            <span class="c1"># Calculate remaining time until expiry</span>
+            <span class="n">expiry_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+            <span class="n">expiry_seconds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expiry_time</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="n">expiry_seconds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">blacklist_token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">expiry_seconds</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Successfully logged out&quot;</span><span class="p">}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Logout failed&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Solution 2: Implement Refresh Token Rotation</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># models.py</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TokenResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">access_token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">refresh_token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">token_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bearer&quot;</span>
+
+<span class="c1"># auth.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_refresh_token</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create long-lived refresh token&quot;&quot;&quot;</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">,</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;refresh&quot;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">to_encode</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create short-lived access token&quot;&quot;&quot;</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Shorter expiry</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">,</span>
+        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;access&quot;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">to_encode</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span><span class="p">)</span>
+
+<span class="c1"># auth_routes.py</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">TokenResponse</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">UserLogin</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">authenticate_user</span><span class="p">(</span><span class="n">credentials</span><span class="o">.</span><span class="n">email</span><span class="p">,</span> <span class="n">credentials</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">)</span>
+
+    <span class="n">access_token</span> <span class="o">=</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">refresh_token</span> <span class="o">=</span> <span class="n">create_refresh_token</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+    <span class="c1"># Store refresh token in database</span>
+    <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">}}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">access_token</span><span class="p">,</span>
+        <span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">,</span>
+        <span class="s2">&quot;token_type&quot;</span><span class="p">:</span> <span class="s2">&quot;bearer&quot;</span>
+    <span class="p">}</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/refresh&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">refresh_access_token</span><span class="p">(</span><span class="n">refresh_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get new access token using refresh token&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">refresh_token</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">ALGORITHM</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;refresh&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid token type&quot;</span><span class="p">)</span>
+
+        <span class="n">email</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sub&quot;</span><span class="p">)</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">refresh_token</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid refresh token&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create new access token</span>
+        <span class="n">new_access_token</span> <span class="o">=</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">new_access_token</span><span class="p">,</span> <span class="s2">&quot;token_type&quot;</span><span class="p">:</span> <span class="s2">&quot;bearer&quot;</span><span class="p">}</span>
+
+    <span class="k">except</span> <span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Refresh token expired&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">jwt</span><span class="o">.</span><span class="n">JWTError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid refresh token&quot;</span><span class="p">)</span>
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/logout&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">logout</span><span class="p">(</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">),</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logout and invalidate refresh token&quot;&quot;&quot;</span>
+    <span class="c1"># Remove refresh token from database</span>
+    <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">current_user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;$unset&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}}</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Blacklist current access token</span>
+    <span class="k">await</span> <span class="n">blacklist_token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>  <span class="c1"># 15 minutes</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Successfully logged out&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Solution 3: Token Versioning</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># models.py</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">token_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Increment on logout/password change</span>
+
+<span class="c1"># auth.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">,</span>
+        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;token_version&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;token_version&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">to_encode</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_current_user</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">)):</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">ALGORITHM</span><span class="p">])</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sub&quot;</span><span class="p">)</span>
+    <span class="n">token_version</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;token_version&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">})</span>
+
+    <span class="c1"># Check if token version matches</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;token_version&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">token_version</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Token has been invalidated&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">user</span>
+
+<span class="c1"># auth_routes.py</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/logout&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">logout</span><span class="p">(</span><span class="n">current_user</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logout by incrementing token version&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">users_collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">current_user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;$inc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;token_version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Successfully logged out&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<h4>Verification</h4>
+<p><strong>Test 1: Token Blacklist</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_token_blacklist</span><span class="p">():</span>
+    <span class="c1"># Login</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password123&quot;</span>
+    <span class="p">})</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Use token (should work)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/bookings&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="c1"># Logout</span>
+    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;/api/auth/logout&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Try to use token again (should fail)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/bookings&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span>
+</code></pre></div>
+
+<hr />
+<h2>3. Medium Severity Vulnerabilities</h2>
+<h3>VULN-MED-001: Weak Password Policy</h3>
+<p><strong>OWASP Category:</strong> A07:2021 – Identification and Authentication Failures<br />
+<strong>CWE:</strong> CWE-521 - Weak Password Requirements<br />
+<strong>CVSS Score:</strong> 5.3 (Medium)<br />
+<strong>Status:</strong> ⚠️ Partially Implemented</p>
+<h4>Description</h4>
+<p>Password policy only enforces minimum length. No complexity requirements for uppercase, lowercase, numbers, or special characters.</p>
+<h4>Remediation</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PasswordValidator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive password validation&quot;&quot;&quot;</span>
+
+    <span class="n">MIN_LENGTH</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">MAX_LENGTH</span> <span class="o">=</span> <span class="mi">128</span>
+
+    <span class="c1"># Common passwords to reject</span>
+    <span class="n">COMMON_PASSWORDS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;123456&quot;</span><span class="p">,</span> <span class="s2">&quot;12345678&quot;</span><span class="p">,</span> <span class="s2">&quot;qwerty&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abc123&quot;</span><span class="p">,</span> <span class="s2">&quot;monkey&quot;</span><span class="p">,</span> <span class="s2">&quot;1234567&quot;</span><span class="p">,</span> <span class="s2">&quot;letmein&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;trustno1&quot;</span><span class="p">,</span> <span class="s2">&quot;dragon&quot;</span><span class="p">,</span> <span class="s2">&quot;baseball&quot;</span><span class="p">,</span> <span class="s2">&quot;iloveyou&quot;</span>
+    <span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate password strength</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (is_valid, list_of_errors)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Length check</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MIN_LENGTH</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password must be at least </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">MIN_LENGTH</span><span class="si">}</span><span class="s2"> characters&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MAX_LENGTH</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password must not exceed </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">MAX_LENGTH</span><span class="si">}</span><span class="s2"> characters&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Complexity checks</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password must contain at least one uppercase letter&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password must contain at least one lowercase letter&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password must contain at least one number&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[!@#$%^&amp;*(),.?</span><span class="se">\&quot;</span><span class="s2">:</span><span class="si">{}</span><span class="s2">|&lt;&gt;]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password must contain at least one special character&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Common password check</span>
+        <span class="k">if</span> <span class="n">password</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">COMMON_PASSWORDS</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password is too common. Please choose a stronger password&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Sequential characters check</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_has_sequential_chars</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Password contains sequential characters&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_has_sequential_chars</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check for sequential characters like &#39;123&#39; or &#39;abc&#39;&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">-</span> <span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">substr</span> <span class="o">=</span> <span class="n">password</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">length</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">substr</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">substr</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">substr</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> 
+                       <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">substr</span><span class="p">))):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">substr</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">substr</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="n">substr</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> 
+                       <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">substr</span><span class="p">))):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_strength</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate password strength&quot;&quot;&quot;</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Length score</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Complexity score</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[!@#$%^&amp;*(),.?</span><span class="se">\&quot;</span><span class="s2">:</span><span class="si">{}</span><span class="s2">|&lt;&gt;]&quot;</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Variety score</span>
+        <span class="n">unique_chars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">unique_chars</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Return strength</span>
+        <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;weak&quot;</span>
+        <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;medium&quot;</span>
+        <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;strong&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;very_strong&quot;</span>
+
+<span class="c1"># models.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">validator</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">full_name</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_password</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="n">is_valid</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">PasswordValidator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+<span class="c1"># auth_routes.py</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/register&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+    <span class="c1"># Password already validated by Pydantic</span>
+    <span class="n">strength</span> <span class="o">=</span> <span class="n">PasswordValidator</span><span class="o">.</span><span class="n">calculate_strength</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="c1"># Optionally warn about weak passwords</span>
+    <span class="k">if</span> <span class="n">strength</span> <span class="o">==</span> <span class="s2">&quot;weak&quot;</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2"> registered with weak password&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ... continue with registration ...</span>
+</code></pre></div>
+
+<hr />
+<h3>VULN-MED-002: No Input Sanitization</h3>
+<p><strong>OWASP Category:</strong> A03:2021 – Injection<br />
+<strong>CWE:</strong> CWE-79 - Cross-Site Scripting (XSS)<br />
+<strong>CVSS Score:</strong> 6.1 (Medium)<br />
+<strong>Status:</strong> ❌ Not Implemented</p>
+<h4>Remediation</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bleach</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">InputSanitizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize user inputs to prevent XSS and injection attacks&quot;&quot;&quot;</span>
+
+    <span class="c1"># Allowed HTML tags (empty for complete stripping)</span>
+    <span class="n">ALLOWED_TAGS</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ALLOWED_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove all HTML tags and escape special characters&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">text</span>
+
+        <span class="c1"># Strip HTML tags</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">bleach</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">ALLOWED_TAGS</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">ALLOWED_ATTRIBUTES</span><span class="p">,</span>
+            <span class="n">strip</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Escape remaining special characters</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_email</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize email address&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">email</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">email</span>
+
+        <span class="c1"># Remove whitespace</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Basic XSS prevention</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sanitize_string</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">email</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively sanitize dictionary values&quot;&quot;&quot;</span>
+        <span class="n">sanitized</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">sanitized</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sanitize_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">sanitized</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sanitize_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">sanitized</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">sanitize_string</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">item</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sanitized</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">sanitized</span>
+
+<span class="c1"># models.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">validator</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">full_name</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">InputSanitizer</span><span class="o">.</span><span class="n">sanitize_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_email</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">InputSanitizer</span><span class="o">.</span><span class="n">sanitize_email</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BookingCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">room_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">guest_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">check_in_date</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">check_out_date</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">guests</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">user_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;guest_name&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_guest_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">InputSanitizer</span><span class="o">.</span><span class="n">sanitize_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<p>(Continuing with remaining vulnerabilities...)</p>
+<h2>5. Remediation Roadmap</h2>
+<h3>Phase 1: Critical Fixes (Week 1)</h3>
+<p><strong>Day 1-2:</strong>
+- ✅ Implement HTTPS enforcement
+- ✅ Configure SSL/TLS certificates
+- ✅ Set security headers</p>
+<p><strong>Day 3-5:</strong>
+- ✅ Implement rate limiting
+- ✅ Add account lockout mechanism
+- ✅ Deploy to staging for testing</p>
+<p><strong>Day 6-7:</strong>
+- ✅ Testing and validation
+- ✅ Deploy to production
+- ✅ Monitor for issues</p>
+<h3>Phase 2: High Priority Fixes (Week 2-3)</h3>
+<p><strong>Week 2:</strong>
+- Implement JWT token blacklist with Redis
+- Add refresh token rotation
+- Implement logout endpoint
+- Testing</p>
+<p><strong>Week 3:</strong>
+- Deploy token management to production
+- Monitor token usage
+- Adjust expiry times if needed</p>
+<h3>Phase 3: Medium Priority Fixes (Week 4-5)</h3>
+<p><strong>Week 4:</strong>
+- Implement strong password policy
+- Add input sanitization
+- Improve error handling</p>
+<p><strong>Week 5:</strong>
+- Testing and validation
+- Deploy to production
+- Update documentation</p>
+<h3>Phase 4: Low Priority Fixes (Week 6)</h3>
+<ul>
+<li>Add additional security headers</li>
+<li>Implement security monitoring</li>
+<li>Set up alerting</li>
+<li>Conduct security audit</li>
+</ul>
+<hr />
+<h2>6. Security Hardening Checklist</h2>
+<h3>Authentication</h3>
+<ul>
+<li>[x] Passwords hashed with bcrypt</li>
+<li>[x] JWT tokens for sessions</li>
+<li>[ ] HTTPS enforced</li>
+<li>[ ] Rate limiting implemented</li>
+<li>[ ] Account lockout implemented</li>
+<li>[ ] Token blacklist implemented</li>
+<li>[ ] Strong password policy</li>
+<li>[ ] Password strength meter (UI)</li>
+</ul>
+<h3>Authorization</h3>
+<ul>
+<li>[x] Role-based access control</li>
+<li>[x] Admin endpoints protected</li>
+<li>[ ] Fine-grained permissions</li>
+<li>[ ] Resource-level authorization</li>
+</ul>
+<h3>Input Validation</h3>
+<ul>
+<li>[x] Email validation</li>
+<li>[x] Required fields validation</li>
+<li>[ ] Input sanitization</li>
+<li>[ ] Length limits enforced</li>
+<li>[ ] Type validation</li>
+<li>[ ] Format validation</li>
+</ul>
+<h3>Data Protection</h3>
+<ul>
+<li>[x] Passwords never in responses</li>
+<li>[x] Hashed passwords in DB</li>
+<li>[ ] HTTPS for all traffic</li>
+<li>[ ] Secure cookie flags</li>
+<li>[ ] Field-level encryption (PII)</li>
+<li>[ ] Data backup encryption</li>
+</ul>
+<h3>Error Handling</h3>
+<ul>
+<li>[x] Generic error messages</li>
+<li>[ ] No stack traces in production</li>
+<li>[ ] Proper logging</li>
+<li>[ ] Error monitoring</li>
+<li>[ ] Alerting on errors</li>
+</ul>
+<h3>Monitoring</h3>
+<ul>
+<li>[ ] Authentication attempt logging</li>
+<li>[ ] Failed login monitoring</li>
+<li>[ ] Suspicious activity detection</li>
+<li>[ ] Audit trail</li>
+<li>[ ] Real-time alerting</li>
+</ul>
+<hr />
+<h2>7. Monitoring and Detection</h2>
+<h3>Metrics to Monitor</h3>
+<p><strong>Authentication Metrics:</strong>
+- Failed login attempts per user
+- Failed login attempts per IP
+- Account lockouts
+- Token generation rate
+- Token validation failures</p>
+<p><strong>Security Metrics:</strong>
+- Rate limit violations
+- Suspicious patterns
+- Brute force attempts
+- Token reuse attempts
+- XSS/injection attempts</p>
+<h3>Alerting Rules</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example: Alert on multiple failed logins</span>
+<span class="k">if</span> <span class="n">failed_logins_per_user</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="ow">in</span> <span class="mi">5</span><span class="n">_minutes</span><span class="p">:</span>
+    <span class="n">send_alert</span><span class="p">(</span><span class="s2">&quot;Possible brute force attack on user account&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">failed_logins_per_ip</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="ow">in</span> <span class="mi">5</span><span class="n">_minutes</span><span class="p">:</span>
+    <span class="n">send_alert</span><span class="p">(</span><span class="s2">&quot;Possible distributed brute force attack&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">account_lockouts</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="ow">in</span> <span class="mi">1</span><span class="n">_hour</span><span class="p">:</span>
+    <span class="n">send_alert</span><span class="p">(</span><span class="s2">&quot;High number of account lockouts&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2>8. Incident Response Plan</h2>
+<h3>Severity Levels</h3>
+<p><strong>P0 - Critical:</strong>
+- Active breach detected
+- Data exfiltration
+- System compromise</p>
+<p><strong>P1 - High:</strong>
+- Multiple failed security controls
+- Suspicious activity patterns
+- Potential breach</p>
+<p><strong>P2 - Medium:</strong>
+- Single security control failure
+- Anomalous behavior
+- Policy violations</p>
+<p><strong>P3 - Low:</strong>
+- Minor security events
+- Informational alerts</p>
+<h3>Response Procedures</h3>
+<p><strong>Step 1: Detection</strong>
+- Monitor alerts
+- Analyze logs
+- Identify threat</p>
+<p><strong>Step 2: Containment</strong>
+- Block malicious IPs
+- Revoke compromised tokens
+- Lock affected accounts</p>
+<p><strong>Step 3: Eradication</strong>
+- Remove malicious access
+- Patch vulnerabilities
+- Update security controls</p>
+<p><strong>Step 4: Recovery</strong>
+- Restore normal operations
+- Unlock legitimate accounts
+- Verify system integrity</p>
+<p><strong>Step 5: Post-Incident</strong>
+- Document incident
+- Update procedures
+- Implement preventive measures
+- Conduct review</p>
+<hr />
+<h2>Conclusion</h2>
+<p>This security assessment identifies 10 vulnerabilities ranging from critical to low severity. Immediate action is required on 7 high-priority items, particularly HTTPS enforcement and rate limiting.</p>
+<p>Following the remediation roadmap will significantly improve the security posture of the authentication system and protect user accounts from common attack vectors.</p>
+<p><strong>Next Steps:</strong>
+1. Review and approve remediation plan
+2. Allocate resources for implementation
+3. Begin Phase 1 critical fixes
+4. Schedule security audit after remediation</p>
+<hr />
+<p><strong>Document Version:</strong> 1.0<br />
+<strong>Last Updated:</strong> February 2026<br />
+<strong>Next Review:</strong> After Phase 4 completion</p>
+    </div>
+</body>
+</html>
