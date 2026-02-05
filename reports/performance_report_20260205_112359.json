@@ -1,0 +1,53 @@
+{
+  "report_metadata": {
+    "generated_at": "2026-02-05T11:23:59.581490",
+    "period_start": "2026-01-29T11:23:59.581484",
+    "period_end": "2026-02-05T11:23:59.581484",
+    "period_days": 7,
+    "report_type": "weekly"
+  },
+  "user_metrics": {
+    "total_users": 0,
+    "new_users": 0,
+    "active_users": 0,
+    "admin_users": 0,
+    "regular_users": 0,
+    "user_growth_rate": 0
+  },
+  "booking_metrics": {
+    "total_bookings": 0,
+    "new_bookings": 0,
+    "confirmed_bookings": 0,
+    "cancelled_bookings": 0,
+    "pending_bookings": 0,
+    "confirmation_rate": 0,
+    "cancellation_rate": 0,
+    "avg_guests_per_booking": 0,
+    "avg_nights_per_booking": 0
+  },
+  "revenue_metrics": {
+    "total_revenue": 0,
+    "avg_booking_value": 0,
+    "potential_revenue": 0,
+    "lost_revenue": 0,
+    "revenue_by_room": {},
+    "bookings_by_room": {},
+    "top_performing_rooms": []
+  },
+  "room_metrics": {
+    "total_rooms": 0,
+    "avg_room_price": 0,
+    "min_room_price": 0,
+    "max_room_price": 0,
+    "room_categories": {}
+  },
+  "health_score": {
+    "total_score": 5,
+    "booking_score": 5,
+    "user_score": 0,
+    "revenue_score": 0,
+    "status": "Needs Attention",
+    "color": "red",
+    "max_score": 100
+  }
+}
